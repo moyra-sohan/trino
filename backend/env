@@ -1,1 +1,0 @@
-DATABASE_URL="postgresql://neondb_owner:npg_oHs7LEv2jZcp@ep-dawn-heart-a5liig8g-pooler.us-east-2.aws.neon.tech/hsc_db?sslmode=verify-full&channel_binding=require"
