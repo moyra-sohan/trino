@@ -1,0 +1,12 @@
+{
+  "name": "trino",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NariSetu Fullstack Application",
+  "scripts": {
+    "dev": "npm --prefix backend run dev",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend/NariSetu run dev",
+    "start": "npm --prefix backend run start"
+  }
+}
