@@ -1,122 +1,183 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import React, { useState, useEffect } from 'react';
+import Navbar from './components/Navbar';
+import HomeSection from './components/HomeSection';
+import AboutSection from './components/AboutSection';
+import SchemesSection from './components/SchemesSection';
+import HelpSection from './components/HelpSection';
+import Footer from './components/Footer';
+import VoiceModal from './components/VoiceModal';
+import ApplyModal from './components/ApplyModal';
+import AuthModal from './components/AuthModal';
+import CscLocatorModal from './components/CscLocatorModal';
+import { content } from './data/content';
+import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [lang, setLang] = useState('en');
+  const [fontScale, setFontScale] = useState(1);
+  const [activeSection, setActiveSection] = useState('home');
+  const [viewMode, setViewMode] = useState('all'); // 'all' | 'home' | 'about' | 'schemes' | 'help'
+
+  // Modals state
+  const [isVoiceOpen, setIsVoiceOpen] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [authRole, setAuthRole] = useState('citizen');
+  const [isApplyOpen, setIsApplyOpen] = useState(false);
+  const [selectedScheme, setSelectedScheme] = useState(null);
+  const [isCscOpen, setIsCscOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState(null);
+
+  const currentContent = content[lang] || content.en;
+
+  // Apply dynamic font scale to html root
+  useEffect(() => {
+    document.documentElement.style.setProperty('--font-scale', fontScale);
+  }, [fontScale]);
+
+  // Toast auto-dismiss
+  const showToast = (msg) => {
+    setToastMessage(msg);
+    setTimeout(() => {
+      setToastMessage((prev) => (prev === msg ? null : prev));
+    }, 3500);
+  };
+
+  // Smooth scroll handler
+  const handleNavigate = (sectionId) => {
+    setActiveSection(sectionId);
+    if (viewMode !== 'all') {
+      setViewMode(sectionId);
+    }
+    const el = document.getElementById(sectionId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  // Auth portal opener
+  const handleOpenAuth = (role = 'citizen') => {
+    setAuthRole(role);
+    setIsAuthOpen(true);
+  };
+
+  // Scheme apply opener
+  const handleApplyScheme = (scheme) => {
+    setSelectedScheme(scheme);
+    setIsApplyOpen(true);
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="app-container">
+      {/* Navbar with Header & Accessibility Tools */}
+      <Navbar
+        lang={lang}
+        setLang={setLang}
+        fontScale={fontScale}
+        setFontScale={setFontScale}
+        activeSection={activeSection}
+        onNavigate={handleNavigate}
+        onOpenVoice={() => setIsVoiceOpen(true)}
+        onOpenAuth={handleOpenAuth}
+        viewMode={viewMode}
+        setViewMode={(mode) => {
+          setViewMode(mode);
+          if (mode !== 'all') {
+            setActiveSection(mode);
+            setTimeout(() => {
+              const el = document.getElementById(mode);
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }, 50);
+          }
+        }}
+      />
 
-      <div className="ticks"></div>
+      {/* Main Content Sections */}
+      <main>
+        {/* 01. HOME */}
+        {(viewMode === 'all' || viewMode === 'home') && (
+          <HomeSection
+            content={currentContent}
+            onOpenAuth={handleOpenAuth}
+            onShowToast={showToast}
+            onNavigate={handleNavigate}
+          />
+        )}
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        {/* 02. ABOUT US */}
+        {(viewMode === 'all' || viewMode === 'about') && (
+          <AboutSection
+            content={currentContent}
+            onNavigate={handleNavigate}
+            onOpenAuth={handleOpenAuth}
+          />
+        )}
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+        {/* 03. SCHEMES & SUPPORT */}
+        {(viewMode === 'all' || viewMode === 'schemes') && (
+          <SchemesSection
+            content={currentContent}
+            lang={lang}
+            onApplyScheme={handleApplyScheme}
+            onShowToast={showToast}
+          />
+        )}
+
+        {/* 04. HELP / SAHAYATA KENDRA */}
+        {(viewMode === 'all' || viewMode === 'help') && (
+          <HelpSection
+            content={currentContent}
+            onOpenVoice={() => setIsVoiceOpen(true)}
+            onOpenCscLocator={() => setIsCscOpen(true)}
+            onShowToast={showToast}
+          />
+        )}
+      </main>
+
+      {/* Footer */}
+      <Footer
+        content={currentContent}
+        onNavigate={handleNavigate}
+        onShowToast={showToast}
+      />
+
+      {/* Interactive Modals */}
+      <VoiceModal
+        isOpen={isVoiceOpen}
+        onClose={() => setIsVoiceOpen(false)}
+        lang={lang}
+        onShowToast={showToast}
+      />
+
+      <ApplyModal
+        isOpen={isApplyOpen}
+        onClose={() => setIsApplyOpen(false)}
+        scheme={selectedScheme}
+        lang={lang}
+        onShowToast={showToast}
+      />
+
+      <AuthModal
+        isOpen={isAuthOpen}
+        onClose={() => setIsAuthOpen(false)}
+        initialRole={authRole}
+        lang={lang}
+        onShowToast={showToast}
+      />
+
+      <CscLocatorModal
+        isOpen={isCscOpen}
+        onClose={() => setIsCscOpen(false)}
+        lang={lang}
+        onShowToast={showToast}
+      />
+
+      {/* Global Toast Alert */}
+      {toastMessage && (
+        <div className="toast-notice">
+          <span>🔔</span>
+          <span>{toastMessage}</span>
+        </div>
+      )}
+    </div>
+  );
 }
-
-export default App
