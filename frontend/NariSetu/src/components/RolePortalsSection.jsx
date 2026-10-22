@@ -66,7 +66,7 @@ export default function RolePortalsSection({ onOpenAuth }) {
             Tailored Experiences for 3 Distinct User Types
           </h2>
           <p className="text-neutral-600 mt-3 text-base">
-            NariSetu is built with dedicated role-based access control (RBAC). Choose your portal below to sign in or register with verified credentials.
+            NariSetu is built with dedicated role-based access control (RBAC). Choose your portal below to sign in with verified credentials.
           </p>
         </div>
 
@@ -109,20 +109,13 @@ export default function RolePortalsSection({ onOpenAuth }) {
                 </div>
 
                 {/* Actions */}
-                <div className="space-y-2.5 pt-4 border-t border-neutral-100">
+                <div className="pt-4 border-t border-neutral-100">
                   <button
                     onClick={() => onOpenAuth('login', r.roleKey)}
-                    className={`w-full py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm ${r.buttonBg}`}
+                    className={`w-full py-3.5 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm hover:shadow-md ${r.buttonBg}`}
                   >
-                    <span>Log In as {r.title.split(' ')[0]}</span>
+                    <span>Log In to {r.title.split(' ')[0]} Portal</span>
                     <ArrowRight className="w-4 h-4" />
-                  </button>
-
-                  <button
-                    onClick={() => onOpenAuth('register', r.roleKey)}
-                    className="w-full py-2.5 px-4 rounded-xl font-semibold text-xs text-neutral-700 bg-neutral-100 hover:bg-neutral-200 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
-                  >
-                    <span>Register New {r.title.split(' ')[0]}</span>
                   </button>
                 </div>
 

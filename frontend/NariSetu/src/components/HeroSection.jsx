@@ -42,7 +42,7 @@ export default function HeroSection({ onOpenAuth, onExploreBorrowers, onOpenCalc
             {/* Action Buttons */}
             <div className="flex flex-wrap items-center gap-4">
               <button
-                onClick={() => onOpenAuth('register')}
+                onClick={() => onOpenAuth('login', 'partner')}
                 className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-neutral-900 text-white font-semibold text-base hover:bg-neutral-800 transition-all shadow-lg shadow-neutral-900/15 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
               >
                 <span>Start Lending Today</span>

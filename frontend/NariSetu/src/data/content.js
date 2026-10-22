@@ -6,8 +6,7 @@ export const content = {
       schemes: "Schemes & Support",
       help: "Help",
       tagline: "Skilled Women | Stronger Communities | Brighter Future",
-      voiceBtn: "Voice",
-      login: "Login / Register",
+      login: "Login",
       guestNotice: "Browsing as Guest. Welcome to NariSetu!"
     },
     hero: {
@@ -291,8 +290,7 @@ export const content = {
       schemes: "योजनाएं और सहायता",
       help: "सहायता केंद्र",
       tagline: "कुशल नारी | सशक्त समुदाय | उज्ज्वल भविष्य",
-      voiceBtn: "आवाज से खोजें",
-      login: "लॉगिन / पंजीकरण",
+      login: "लॉगिन",
       guestNotice: "अतिथि के रूप में ब्राउज़ कर रहे हैं। नारीसेतु में आपका स्वागत है!"
     },
     hero: {
@@ -552,8 +550,7 @@ export const content = {
       schemes: "সরকারি স্কিম ও সহায়তা",
       help: "সহায়তা কেন্দ্র",
       tagline: "দক্ষ নারী | শক্তিশালী সমাজ | উজ্জ্বল ভবিষ্যৎ",
-      voiceBtn: "ভয়েস সাহায্য",
-      login: "লগইন / নিবন্ধন",
+      login: "লগইন",
       guestNotice: "অতিথি হিসেবে ব্রাউজ করছেন। নারীসেতুতে স্বাগতম!"
     },
     hero: {

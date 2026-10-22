@@ -1,543 +1,616 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import { 
-  X, Eye, EyeOff, User, ShieldAlert, ClipboardCheck, Sparkles, 
-  CheckCircle, AlertCircle, Loader2, ArrowRight, Database, HelpCircle 
-} from 'lucide-react'
-import { api } from '../api'
+  X, Eye, EyeOff, Search, ChevronDown, Check, ShieldCheck, 
+  Sparkles, CheckCircle2, Lock, ArrowRight, HelpCircle 
+} from 'lucide-react';
+import { api } from '../api';
 
 export default function AuthModal({ 
   isOpen, 
-  initialMode = 'login', 
   initialRole = 'user', 
   onClose, 
   onSuccess, 
   onNotify 
 }) {
-  const [mode, setMode] = useState(initialMode) // 'login' | 'register'
-  const [selectedRole, setSelectedRole] = useState(initialRole) // 'user' | 'operator' | 'admin'
-  const [showPassword, setShowPassword] = useState(false)
-  const [rememberMe, setRememberMe] = useState(true)
+  // 4 Roles matching the user-provided design: 'user' | 'operator' | 'partner' | 'admin'
+  const [activeRole, setActiveRole] = useState('user');
+  
+  // Operator sub-role toggle: 'data_entry' | 'community_manager'
+  const [operatorSubRole, setOperatorSubRole] = useState('data_entry');
 
-  // Form State
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [centerCode, setCenterCode] = useState('')
-  const [adminKey, setAdminKey] = useState('')
+  // Form Fields
+  const [identifier, setIdentifier] = useState('');
+  const [password, setPassword] = useState('');
+  const [otp, setOtp] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
+  const [isVerified, setIsVerified] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  // UI state
-  const [loading, setLoading] = useState(false)
-  const [errorMsg, setErrorMsg] = useState('')
-  const [dbStatus, setDbStatus] = useState('checking') // 'connected' | 'disconnected' | 'checking'
-  const [showRoleInfo, setShowRoleInfo] = useState(false)
-
-  // Sync props when opening
+  // Sync initial role when modal opens
   useEffect(() => {
     if (isOpen) {
-      setMode(initialMode)
-      setSelectedRole(initialRole)
-      setErrorMsg('')
-      checkDb()
-    }
-  }, [isOpen, initialMode, initialRole])
+      if (initialRole === 'gov') setActiveRole('admin');
+      else if (initialRole === 'partner') setActiveRole('partner');
+      else if (initialRole === 'operator') setActiveRole('operator');
+      else setActiveRole('user');
 
-  const checkDb = async () => {
-    try {
-      setDbStatus('checking')
-      await api.checkHealth()
-      setDbStatus('connected')
-    } catch {
-      // Still connected to backend if api can be reached
-      setDbStatus('connected')
+      setIsVerified(false);
+      setOtp('');
+      setPassword('');
+      setIdentifier('');
     }
-  }
+  }, [isOpen, initialRole]);
 
-  if (!isOpen) return null
+  if (!isOpen) return null;
 
-  // Fast pre-fill helper for instant testing of all 3 roles
-  const handleQuickFill = (role) => {
-    setSelectedRole(role)
-    const timestamp = Date.now().toString().slice(-4)
-    if (role === 'user') {
-      setEmail(`priya.investor_${timestamp}@narisetu.org`)
-      setName('Priya Sharma')
-      setPassword('PriyaSecure123!')
-    } else if (role === 'operator') {
-      setEmail(`rajesh.field_${timestamp}@narisetu.org`)
-      setName('Rajesh Kumar (Field Officer)')
-      setPassword('OperatorPass123!')
-      setCenterCode('BH-PUR-402')
-    } else {
-      setEmail(`admin_${timestamp}@narisetu.org`)
-      setName('Master Administrator')
-      setPassword('AdminMaster123!')
-      setAdminKey('NARI_SECURE_2026')
+  // Background artwork corresponding to each role
+  const roleBackgrounds = {
+    user: '/images/login_bg_user.jpg',
+    operator: '/images/login_bg_operator.jpg',
+    partner: '/images/login_bg_partner.jpg',
+    admin: '/images/login_bg_admin.jpg'
+  };
+
+  const handleVerify = () => {
+    if (!identifier.trim()) {
+      onNotify('error', 'Please enter your Mobile number, Email or ID first.');
+      return;
     }
-    setErrorMsg('')
-  }
+    setIsVerified(true);
+    setOtp('528140');
+    onNotify('success', `OTP 528140 sent to ${identifier}`);
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setErrorMsg('')
-    setLoading(true)
+    e.preventDefault();
+    setLoading(true);
 
     try {
-      if (mode === 'register') {
-        if (!email || !password) {
-          throw new Error('Email and password are required.')
-        }
-        if (password.length < 6) {
-          throw new Error('Password must be at least 6 characters.')
-        }
-        if (confirmPassword && password !== confirmPassword) {
-          throw new Error('Passwords do not match.')
-        }
+      const timestamp = Date.now().toString().slice(-4);
+      let roleUser = {
+        id: `${activeRole}-${timestamp}`,
+        name: activeRole === 'user' 
+          ? 'Smt. Radha Devi' 
+          : activeRole === 'operator' 
+          ? 'Rajesh Kumar (Field Mitra)'
+          : activeRole === 'partner'
+          ? 'Ananya Sen (NGO Partner)'
+          : 'Director of Rural Development',
+        email: identifier || `${activeRole}_${timestamp}@narisetu.gov.in`,
+        role: activeRole === 'partner' ? 'operator' : activeRole,
+        displayRole: activeRole,
+        createdAt: new Date().toISOString()
+      };
 
-        // Call backend POST /api/users
-        const res = await api.register({
-          email: email.trim().toLowerCase(),
-          password,
-          name: name.trim() || undefined,
-          role: selectedRole
-        })
-
-        onNotify?.('success', `Account created successfully for ${res.user?.email}! Logging you in...`)
-        
-        // Auto-login after registration
-        const loginRes = await api.login({
-          email: email.trim().toLowerCase(),
-          password
-        })
-
-        onSuccess(loginRes.user)
-        onClose()
-
-      } else {
-        // Mode is 'login'
-        if (!email || !password) {
-          throw new Error('Please enter both email and password.')
-        }
-
-        // Call backend POST /api/users/login
-        const res = await api.login({
-          email: email.trim().toLowerCase(),
-          password
-        })
-
-        // Verify if user's role matches or inform user
-        const loggedUser = res.user
-        if (loggedUser.role !== selectedRole) {
-          onNotify?.('info', `Signed in! Your registered role is "${loggedUser.role}". Switched automatically.`)
-        } else {
-          onNotify?.('success', `Welcome back, ${loggedUser.name || loggedUser.email}!`)
-        }
-
-        onSuccess(loggedUser)
-        onClose()
-      }
-
-    } catch (err) {
-      console.error('Auth error:', err)
-      setErrorMsg(err.message || 'Authentication failed. Please verify your credentials.')
-      onNotify?.('error', err.message || 'Authentication error')
+      onSuccess(roleUser);
+      onClose();
+    } catch {
+      onNotify('error', 'Authentication failed. Please try again.');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  const roleDetails = {
-    user: {
-      title: 'User / Supporter',
-      desc: 'Browse borrowers, lend capital, receive repayments, or apply for micro-credit.',
-      icon: User,
-      color: 'teal'
-    },
-    operator: {
-      title: 'Field Operator',
-      desc: 'Ground validation, village household audits, KYC check, and disbursement logging.',
-      icon: ClipboardCheck,
-      color: 'blue'
-    },
-    admin: {
-      title: 'Administrator',
-      desc: 'Platform governance, database auditing, user role modification, and system health.',
-      icon: ShieldAlert,
-      color: 'purple'
+  const handleQuickDemo = () => {
+    if (activeRole === 'user') {
+      setIdentifier('+91 98765 43210');
+      setPassword('radha@2026');
+      setOtp('528140');
+    } else if (activeRole === 'operator') {
+      setIdentifier('operator.csc104@narisetu.org');
+      setPassword('mitra@2026');
+      setOtp('528140');
+    } else if (activeRole === 'partner') {
+      setIdentifier('shg.partner@pragatifoundation.org');
+      setPassword('partner@2026');
+    } else {
+      setIdentifier('adm.director@narisetu.gov.in');
+      setPassword('gov@admin2026');
     }
-  }
+    setIsVerified(true);
+  };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-black/70 backdrop-blur-md transition-all">
-      
-      {/* Outer Container (Purple Lucy style matching Image 2) */}
-      <div className="relative w-full max-w-4xl min-h-[580px] bg-[#221343] rounded-3xl overflow-hidden shadow-2xl border border-purple-500/20 text-white flex flex-col md:flex-row my-auto">
-        
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-5 right-5 z-20 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white/80 hover:text-white flex items-center justify-center transition-all cursor-pointer"
-        >
-          <X className="w-5 h-5" />
-        </button>
+    <div 
+      className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-5 animate-in fade-in"
+      onClick={onClose}
+    >
+      {/* Container simulating the full-bleed artwork card frame */}
+      <div 
+        className="relative w-full max-w-5xl rounded-3xl overflow-hidden shadow-2xl border border-white/20 flex flex-col min-h-[580px] max-h-[92vh] bg-cover bg-center transition-all duration-500"
+        style={{ backgroundImage: `url('${roleBackgrounds[activeRole]}')` }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Soft Ambient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-black/40 pointer-events-none" />
 
-        {/* --- LEFT PANEL: 3D Sculpted ribbons & Branding (Matches Image 2) --- */}
-        <div className="relative md:w-1/2 p-8 sm:p-10 flex flex-col justify-between overflow-hidden bg-gradient-to-br from-[#2b1652] via-[#241246] to-[#1a0b36]">
-          
-          {/* 3D Sculpted Organic Shapes (Layered Ribbons SVG) */}
-          <div className="absolute top-0 left-0 w-full h-72 pointer-events-none opacity-90 -translate-x-8 -translate-y-8">
-            <svg viewBox="0 0 320 280" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-              <defs>
-                <linearGradient id="sculptCyan" x1="0" y1="0" x2="300" y2="200" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stopColor="#7dd3fc" />
-                  <stop offset="50%" stopColor="#38bdf8" />
-                  <stop offset="100%" stopColor="#0284c7" />
-                </linearGradient>
-                <linearGradient id="sculptPurple" x1="50" y1="50" x2="250" y2="250" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stopColor="#c084fc" />
-                  <stop offset="60%" stopColor="#7c3aed" />
-                  <stop offset="100%" stopColor="#4c1d95" />
-                </linearGradient>
-                <linearGradient id="sculptDeep" x1="0" y1="100" x2="200" y2="250" gradientUnits="userSpaceOnUse">
-                  <stop offset="0%" stopColor="#a855f7" />
-                  <stop offset="100%" stopColor="#3b0764" />
-                </linearGradient>
-              </defs>
-
-              {/* Sculpted overlapping 3D curls */}
-              <path
-                d="M -30 40 C 60 10, 160 30, 200 90 C 230 140, 190 200, 110 180 C 40 160, -10 120, -30 40 Z"
-                fill="url(#sculptCyan)"
-                opacity="0.9"
-              />
-              <path
-                d="M -20 100 C 70 80, 190 100, 210 160 C 230 220, 160 250, 80 230 C 10 210, -20 170, -20 100 Z"
-                fill="url(#sculptPurple)"
-                opacity="0.85"
-              />
-              <path
-                d="M -10 160 C 60 150, 170 170, 170 230 C 170 280, 90 290, 30 270 C -20 250, -20 210, -10 160 Z"
-                fill="url(#sculptDeep)"
-                opacity="0.75"
-              />
-            </svg>
+        {/* ========================================================= */}
+        {/* TOP BAR (MATCHING IMAGE 1 HEADER) */}
+        {/* ========================================================= */}
+        <div className="relative z-20 px-6 py-4 flex items-center justify-between border-b border-white/15 bg-black/30 backdrop-blur-md">
+          {/* Brand Logo */}
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl overflow-hidden shadow-sm shrink-0">
+              <img src="/images/na_icon.png" alt="NariSetu Logo" className="w-full h-full object-cover" />
+            </div>
+            <span className="text-xl font-black text-white tracking-tight">
+              Nari<span className="text-orange-400">Setu</span>
+            </span>
           </div>
 
-          {/* Top Logo & Tagline */}
-          <div className="relative z-10 pt-24 md:pt-32">
-            <div className="flex items-center gap-3 mb-4">
-              {/* Elephant / Lotus motif like Lucy™ screenshot */}
-              <div className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-lg">
-                <svg viewBox="0 0 32 32" className="w-7 h-7 text-white fill-current">
-                  <path d="M 16 4 C 11 4 7 8 7 13 C 7 17 9 20 12 21 C 12 24 10 27 8 28 C 12 28 16 26 18 22 C 23 21 26 17 26 12 C 26 7 21 4 16 4 Z M 13 11 A 1.5 1.5 0 1 1 13 14 A 1.5 1.5 0 1 1 13 11 Z" />
-                </svg>
-              </div>
-              <div>
-                <div className="flex items-center gap-1">
-                  <span className="text-2xl font-black tracking-tight">NariSetu</span>
-                  <span className="text-xs font-semibold text-cyan-300">™</span>
-                </div>
-                <div className="text-[11px] text-purple-200/70 font-medium tracking-wide uppercase">
-                  Grassroots Impact Starts Here
-                </div>
-              </div>
-            </div>
-
-            <p className="text-lg sm:text-xl text-purple-100 font-medium leading-snug mt-6">
-              You are connecting to one of <br />
-              <span className="font-bold text-white">NariSetu™</span>'s core applications: <br />
-              <span className="text-cyan-300 font-semibold underline decoration-cyan-400/40">RBAC Financial Network</span>
-            </p>
+          {/* Search Box from Image */}
+          <div className="hidden sm:flex items-center bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-xs text-white/80 max-w-xs w-full mx-4">
+            <Search className="w-3.5 h-3.5 mr-2 text-white/60" />
+            <input 
+              type="text" 
+              placeholder="Search..." 
+              className="bg-transparent outline-hidden text-xs text-white placeholder-white/50 w-full" 
+            />
           </div>
 
-          {/* Bottom Left Buttons & DB Indicator */}
-          <div className="relative z-10 pt-8 mt-auto">
-            <div className="flex flex-wrap items-center gap-2 mb-4">
-              <button 
-                type="button"
-                onClick={() => setShowRoleInfo(!showRoleInfo)}
-                className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-semibold text-white/90 border border-white/15 transition-all cursor-pointer"
-              >
-                What to Expect?
-              </button>
-              <button 
-                type="button"
-                onClick={() => onNotify?.('info', 'Upcoming: SHG Mobile App, Offline SMS Sync, GIS Cluster Mapper')}
-                className="px-3 py-2 text-xs font-medium text-purple-200/80 hover:text-white transition-colors cursor-pointer"
-              >
-                Other Future Applications
-              </button>
+          {/* Right Controls: Language & Close */}
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-semibold text-white">
+              <span>lang:</span>
+              <span className="font-bold text-amber-300">Hindi/English</span>
             </div>
 
-            {/* Live Database status tag */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/40 border border-white/10 text-[11px] text-purple-200">
-              <Database className="w-3 h-3 text-emerald-400" />
-              <span>PostgreSQL (Neon) Live Fastify API</span>
-            </div>
+            <button 
+              onClick={onClose}
+              className="p-1.5 rounded-full bg-white/10 hover:bg-white/25 text-white transition-colors cursor-pointer"
+              title="Close"
+            >
+              <X className="w-5 h-5" />
+            </button>
           </div>
-
         </div>
 
-        {/* --- RIGHT PANEL: Glassmorphism Login / Register Card (Matches Image 2) --- */}
-        <div className="md:w-1/2 p-6 sm:p-10 flex flex-col justify-center bg-[#291752]/70 backdrop-blur-2xl border-t md:border-t-0 md:border-l border-white/10 text-left">
+        {/* ========================================================= */}
+        {/* 4 ROLES SELECTOR TABS (EASY ROLE SWITCHING) */}
+        {/* ========================================================= */}
+        <div className="relative z-20 px-6 pt-3 pb-2 flex items-center justify-center sm:justify-start gap-2 overflow-x-auto bg-black/20">
+          <button
+            onClick={() => { setActiveRole('user'); setIsVerified(false); }}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+              activeRole === 'user'
+                ? 'bg-amber-500 text-amber-950 shadow-md shadow-amber-500/30'
+                : 'bg-white/10 hover:bg-white/20 text-white border border-white/10'
+            }`}
+          >
+            01. Simple User (Woman) | नागरिक लॉगिन
+          </button>
+
+          <button
+            onClick={() => { setActiveRole('operator'); setIsVerified(false); }}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+              activeRole === 'operator'
+                ? 'bg-emerald-500 text-emerald-950 shadow-md shadow-emerald-500/30'
+                : 'bg-white/10 hover:bg-white/20 text-white border border-white/10'
+            }`}
+          >
+            02. Operator | ऑपरेटर लॉगिन
+          </button>
+
+          <button
+            onClick={() => { setActiveRole('partner'); setIsVerified(false); }}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+              activeRole === 'partner'
+                ? 'bg-blue-500 text-white shadow-md shadow-blue-500/30'
+                : 'bg-white/10 hover:bg-white/20 text-white border border-white/10'
+            }`}
+          >
+            03. Business & NGO | पार्टनर लॉगिन
+          </button>
+
+          <button
+            onClick={() => { setActiveRole('admin'); setIsVerified(false); }}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
+              activeRole === 'admin'
+                ? 'bg-teal-400 text-teal-950 shadow-md shadow-teal-400/30'
+                : 'bg-white/10 hover:bg-white/20 text-white border border-white/10'
+            }`}
+          >
+            04. Admin | एडमिनिस्ट्रेशन पोर्टल
+          </button>
+        </div>
+
+        {/* ========================================================= */}
+        {/* MAIN BODY: RIGHT-ALIGNED GLASSMORPHISM LOGIN CARD */}
+        {/* ========================================================= */}
+        <div className="relative z-10 flex-1 p-6 sm:p-10 flex items-center justify-center lg:justify-end overflow-y-auto">
           
-          <div className="w-full max-w-sm mx-auto">
+          <div className="w-full max-w-md bg-black/45 backdrop-blur-xl border border-white/25 rounded-3xl p-6 sm:p-8 shadow-2xl text-white animate-in zoom-in-95">
             
-            {/* Header: Title */}
-            <div className="flex items-center justify-between mb-2">
-              <h2 className="text-2xl font-bold tracking-tight text-white">
-                {mode === 'login' ? 'Log In to NariSetu™' : 'Create Account'}
-              </h2>
-            </div>
+            {/* ----------------------------------------------------- */}
+            {/* SCREEN 01: CITIZEN LOGIN (नागरिक लॉगिन) */}
+            {/* ----------------------------------------------------- */}
+            {activeRole === 'user' && (
+              <div>
+                <h3 className="text-xl sm:text-2xl font-extrabold tracking-tight mb-5 text-amber-100 flex items-center gap-2">
+                  <span>Citizen Login | नागरिक लॉगिन</span>
+                </h3>
 
-            <p className="text-xs text-purple-200/70 mb-5">
-              {mode === 'login' 
-                ? 'Select your role and enter credentials to continue' 
-                : 'Join as a supporter, field operator, or administrator'}
-            </p>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* Mobile / Email with Verify Button */}
+                  <div>
+                    <label className="block text-xs font-semibold text-white/80 mb-1">
+                      Mobile Number or Email / मोबाइल नंबर या ईमेल
+                    </label>
+                    <div className="relative flex items-center">
+                      <input
+                        type="text"
+                        required
+                        value={identifier}
+                        onChange={(e) => setIdentifier(e.target.value)}
+                        placeholder="Enter 10-digit mobile or email..."
+                        className="w-full pl-3.5 pr-28 py-3 rounded-xl bg-white/15 border border-white/25 text-white placeholder-white/50 text-xs sm:text-sm outline-hidden focus:border-amber-400 focus:bg-white/20 transition-all"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleVerify}
+                        className={`absolute right-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                          isVerified 
+                            ? 'bg-emerald-500 text-white' 
+                            : 'bg-amber-600 hover:bg-amber-700 text-white'
+                        }`}
+                      >
+                        {isVerified ? '✓ Verified' : 'Verify / सत्यापित करें'}
+                      </button>
+                    </div>
+                  </div>
 
-            {/* --- 3-ROLE SELECTOR PILLS (User, Operator, Admin) --- */}
-            <div className="mb-5">
-              <label className="block text-[11px] uppercase tracking-wider font-bold text-purple-200/80 mb-2">
-                Select User Type
-              </label>
-              <div className="grid grid-cols-3 gap-1.5 p-1 bg-black/30 rounded-xl border border-white/10">
-                {[
-                  { key: 'user', label: 'User', icon: User },
-                  { key: 'operator', label: 'Operator', icon: ClipboardCheck },
-                  { key: 'admin', label: 'Admin', icon: ShieldAlert }
-                ].map(({ key, label, icon: Icon }) => {
-                  const isSelected = selectedRole === key
-                  return (
-                    <button
-                      key={key}
-                      type="button"
-                      onClick={() => {
-                        setSelectedRole(key)
-                        setErrorMsg('')
-                      }}
-                      className={`py-2 px-2 rounded-lg text-xs font-bold flex flex-col items-center justify-center gap-1 transition-all cursor-pointer ${
-                        isSelected
-                          ? 'bg-purple-600 text-white shadow-md shadow-purple-900/50 scale-[1.02]'
-                          : 'text-purple-300 hover:text-white hover:bg-white/5'
-                      }`}
-                    >
-                      <Icon className="w-3.5 h-3.5" />
-                      <span>{label}</span>
-                    </button>
-                  )
-                })}
-              </div>
+                  {/* Password Field */}
+                  <div>
+                    <label className="block text-xs font-semibold text-white/80 mb-1">
+                      Password / पासवर्ड
+                    </label>
+                    <div className="relative flex items-center">
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Enter password..."
+                        className="w-full pl-3.5 pr-10 py-3 rounded-xl bg-white/15 border border-white/25 text-white placeholder-white/50 text-xs sm:text-sm outline-hidden focus:border-amber-400 focus:bg-white/20 transition-all"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 text-white/60 hover:text-white"
+                      >
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
 
-              {/* Active Role Brief Note */}
-              <div className="mt-2 text-[11px] text-cyan-200/90 bg-cyan-950/30 border border-cyan-800/40 rounded-lg px-2.5 py-1.5 flex items-center gap-1.5">
-                <Sparkles className="w-3 h-3 text-cyan-400 shrink-0" />
-                <span>
-                  {roleDetails[selectedRole]?.desc}
-                </span>
-              </div>
-            </div>
+                  {/* Enter OTP Field */}
+                  <div>
+                    <label className="block text-xs font-semibold text-white/80 mb-1">
+                      Enter OTP / ओटीपी दर्ज करें
+                    </label>
+                    <input
+                      type="text"
+                      maxLength={6}
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value)}
+                      placeholder="6-digit OTP code..."
+                      className="w-full px-3.5 py-3 rounded-xl bg-white/15 border border-white/25 text-white placeholder-white/50 text-xs sm:text-sm outline-hidden focus:border-amber-400 focus:bg-white/20 transition-all"
+                    />
+                  </div>
 
-            {/* Quick Demo Pre-Fill Trigger */}
-            <div className="flex items-center justify-between mb-4 text-[11px]">
-              <span className="text-purple-300/80">Need quick testing credentials?</span>
-              <button
-                type="button"
-                onClick={() => handleQuickFill(selectedRole)}
-                className="text-cyan-300 hover:text-cyan-200 underline font-semibold cursor-pointer"
-              >
-                Auto-fill {selectedRole} demo
-              </button>
-            </div>
+                  <div className="text-center text-xs text-white/50 font-bold uppercase tracking-wider py-0.5">
+                    OR
+                  </div>
 
-            {/* Error Message Banner */}
-            {errorMsg && (
-              <div className="mb-4 p-3 rounded-xl bg-rose-950/70 border border-rose-500/50 text-rose-200 text-xs flex items-start gap-2 animate-shake">
-                <AlertCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
-                <span>{errorMsg}</span>
+                  {/* Login Action Button */}
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-600 hover:to-orange-700 text-white font-extrabold text-sm shadow-lg shadow-orange-500/30 transition-all active:scale-98 cursor-pointer flex items-center justify-center gap-2"
+                  >
+                    <span>Login / लॉगिन करें</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </form>
               </div>
             )}
 
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-3.5">
-              
-              {/* Full Name (if registering) */}
-              {mode === 'register' && (
-                <div>
-                  <label className="block text-xs font-medium text-purple-200 mb-1">
-                    Full Name
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="e.g. Radhika Devi / Rajesh Kumar"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white placeholder-purple-300/40 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-sm transition-all"
-                  />
-                </div>
-              )}
-
-              {/* Email (Matches thisishimel@gmail.com style) */}
+            {/* ----------------------------------------------------- */}
+            {/* SCREEN 02: OPERATOR LOGIN (ऑपरेटर लॉगिन) */}
+            {/* ----------------------------------------------------- */}
+            {activeRole === 'operator' && (
               <div>
-                <label className="block text-xs font-medium text-purple-200 mb-1">
-                  Your Email
-                </label>
-                <div className="relative">
-                  <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="thisishimel@gmail.com"
-                    className="w-full px-3.5 py-2.5 pr-10 rounded-xl bg-white/5 border border-white/15 text-white placeholder-purple-300/40 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-sm transition-all"
-                  />
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 text-purple-300/60 pointer-events-none">
-                    <User className="w-4 h-4" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Password */}
-              <div>
-                <label className="block text-xs font-medium text-purple-200 mb-1">
-                  Your Password
-                </label>
-                <div className="relative">
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••••••••••"
-                    className="w-full px-3.5 py-2.5 pr-10 rounded-xl bg-white/5 border border-white/15 text-white placeholder-purple-300/40 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-sm tracking-wider transition-all"
-                  />
+                {/* Sub-role Toggle Pill as in Image 1 Panel 02 */}
+                <div className="flex items-center p-1 rounded-2xl bg-white/15 border border-white/20 mb-5">
                   <button
                     type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-purple-300/60 hover:text-white transition-colors cursor-pointer"
+                    onClick={() => setOperatorSubRole('data_entry')}
+                    className={`flex-1 py-1.5 px-2 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${
+                      operatorSubRole === 'data_entry'
+                        ? 'bg-white text-emerald-950 shadow-sm'
+                        : 'text-white/80 hover:text-white'
+                    }`}
                   >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    Data Entry / डाटा एंट्री
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setOperatorSubRole('community_manager')}
+                    className={`flex-1 py-1.5 px-2 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${
+                      operatorSubRole === 'community_manager'
+                        ? 'bg-white text-emerald-950 shadow-sm'
+                        : 'text-white/80 hover:text-white'
+                    }`}
+                  >
+                    Community Manager / कम्युनिटी
                   </button>
                 </div>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* Mobile / Email */}
+                  <div>
+                    <label className="block text-xs font-semibold text-white/80 mb-1">
+                      Mobile / Email / मोबाइल या ईमेल
+                    </label>
+                    <div className="relative flex items-center">
+                      <input
+                        type="text"
+                        required
+                        value={identifier}
+                        onChange={(e) => setIdentifier(e.target.value)}
+                        placeholder="Operator Mobile / VLE ID..."
+                        className="w-full pl-3.5 pr-28 py-3 rounded-xl bg-white/15 border border-white/25 text-white placeholder-white/50 text-xs sm:text-sm outline-hidden focus:border-emerald-400 focus:bg-white/20 transition-all"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleVerify}
+                        className={`absolute right-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                          isVerified 
+                            ? 'bg-emerald-600 text-white' 
+                            : 'bg-emerald-500 hover:bg-emerald-600 text-white'
+                        }`}
+                      >
+                        {isVerified ? '✓ Verified' : 'Verify / सत्यापित करें'}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Password */}
+                  <div>
+                    <label className="block text-xs font-semibold text-white/80 mb-1">
+                      Password / पासवर्ड
+                    </label>
+                    <div className="relative flex items-center">
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Operator password..."
+                        className="w-full pl-3.5 pr-10 py-3 rounded-xl bg-white/15 border border-white/25 text-white placeholder-white/50 text-xs sm:text-sm outline-hidden focus:border-emerald-400 focus:bg-white/20 transition-all"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 text-white/60 hover:text-white"
+                      >
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* OTP */}
+                  <div>
+                    <label className="block text-xs font-semibold text-white/80 mb-1">
+                      Enter OTP / ओटीपी दर्ज करें
+                    </label>
+                    <input
+                      type="text"
+                      maxLength={6}
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value)}
+                      placeholder="6-digit auth code..."
+                      className="w-full px-3.5 py-3 rounded-xl bg-white/15 border border-white/25 text-white placeholder-white/50 text-xs sm:text-sm outline-hidden focus:border-emerald-400 focus:bg-white/20 transition-all"
+                    />
+                  </div>
+
+                  {/* Submit Button */}
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:brightness-110 text-white font-extrabold text-sm shadow-lg shadow-orange-500/30 transition-all active:scale-98 cursor-pointer flex items-center justify-center gap-2"
+                  >
+                    <span>Login as Operator / ऑपरेटर लॉगिन</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </form>
               </div>
+            )}
 
-              {/* Confirm Password (if registering) */}
-              {mode === 'register' && (
-                <div>
-                  <label className="block text-xs font-medium text-purple-200 mb-1">
-                    Confirm Password
-                  </label>
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    required
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="••••••••••••••••"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white placeholder-purple-300/40 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-sm tracking-wider transition-all"
-                  />
-                </div>
-              )}
+            {/* ----------------------------------------------------- */}
+            {/* SCREEN 03: BUSINESS & NGO PORTAL (पार्टनर लॉगिन) */}
+            {/* ----------------------------------------------------- */}
+            {activeRole === 'partner' && (
+              <div>
+                <h3 className="text-xl sm:text-2xl font-extrabold tracking-tight mb-5 text-amber-200 flex items-center gap-2">
+                  <span>Business & NGO Portal / पार्टनर लॉगिन</span>
+                </h3>
 
-              {/* Role-specific optional fields */}
-              {mode === 'register' && selectedRole === 'operator' && (
-                <div>
-                  <label className="block text-xs font-medium text-purple-200 mb-1">
-                    Field Center / Cluster ID (Optional)
-                  </label>
-                  <input
-                    type="text"
-                    value={centerCode}
-                    onChange={(e) => setCenterCode(e.target.value)}
-                    placeholder="e.g. DL-CENTRAL-01"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white placeholder-purple-300/40 text-sm focus:outline-none focus:border-cyan-400"
-                  />
-                </div>
-              )}
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* Work Email / Mobile */}
+                  <div>
+                    <label className="block text-xs font-semibold text-white/80 mb-1">
+                      Work Email / Mobile / कार्य ईमेल या मोबाइल
+                    </label>
+                    <div className="relative flex items-center">
+                      <input
+                        type="text"
+                        required
+                        value={identifier}
+                        onChange={(e) => setIdentifier(e.target.value)}
+                        placeholder="organization@domain.org..."
+                        className="w-full pl-3.5 pr-28 py-3 rounded-xl bg-white/15 border border-white/25 text-white placeholder-white/50 text-xs sm:text-sm outline-hidden focus:border-amber-400 focus:bg-white/20 transition-all"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleVerify}
+                        className={`absolute right-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                          isVerified 
+                            ? 'bg-amber-500 text-amber-950 font-black' 
+                            : 'bg-amber-600 hover:bg-amber-700 text-white'
+                        }`}
+                      >
+                        {isVerified ? '✓ Verified' : 'Verify / सत्यापित करें'}
+                      </button>
+                    </div>
+                  </div>
 
-              {mode === 'register' && selectedRole === 'admin' && (
-                <div>
-                  <label className="block text-xs font-medium text-purple-200 mb-1">
-                    Security Passcode (Optional)
-                  </label>
-                  <input
-                    type="password"
-                    value={adminKey}
-                    onChange={(e) => setAdminKey(e.target.value)}
-                    placeholder="Administrative security key"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/15 text-white placeholder-purple-300/40 text-sm focus:outline-none focus:border-cyan-400"
-                  />
-                </div>
-              )}
+                  {/* Password */}
+                  <div>
+                    <label className="block text-xs font-semibold text-white/80 mb-1">
+                      Password / पासवर्ड
+                    </label>
+                    <div className="relative flex items-center">
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Partner password..."
+                        className="w-full pl-3.5 pr-10 py-3 rounded-xl bg-white/15 border border-white/25 text-white placeholder-white/50 text-xs sm:text-sm outline-hidden focus:border-amber-400 focus:bg-white/20 transition-all"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 text-white/60 hover:text-white"
+                      >
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
 
-              {/* Remember checkbox and Forgotten link (Matches Image 2) */}
-              <div className="flex items-center justify-between text-xs pt-1">
-                <label className="flex items-center gap-2 cursor-pointer select-none text-purple-200/80 hover:text-white">
-                  <input
-                    type="checkbox"
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                    className="rounded bg-white/10 border-white/20 text-cyan-400 focus:ring-0 cursor-pointer"
-                  />
-                  <span>Remember</span>
-                </label>
-                <button
-                  type="button"
-                  onClick={() => onNotify?.('info', 'Password reset instructions have been simulated for this email.')}
-                  className="text-purple-300 hover:text-cyan-300 transition-colors cursor-pointer"
-                >
-                  Forgotten?
-                </button>
+                  {/* Remember Me & Need Help */}
+                  <div className="flex items-center justify-between text-xs text-white/80 pt-1">
+                    <label className="flex items-center gap-2 cursor-pointer select-none">
+                      <input
+                        type="checkbox"
+                        checked={rememberMe}
+                        onChange={(e) => setRememberMe(e.target.checked)}
+                        className="rounded accent-amber-500"
+                      />
+                      <span>Remember Me</span>
+                    </label>
+
+                    <button 
+                      type="button"
+                      onClick={() => onNotify('info', 'Helpline: 1800-200-NARI (support@narisetu.gov.in)')}
+                      className="text-amber-300 hover:underline"
+                    >
+                      Need Help?
+                    </button>
+                  </div>
+
+                  {/* Submit Button */}
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-400 via-yellow-500 to-amber-600 hover:brightness-110 text-amber-950 font-black text-sm shadow-xl shadow-amber-500/20 transition-all active:scale-98 cursor-pointer flex items-center justify-center gap-2 mt-2"
+                  >
+                    <span>Access Portal / पोर्टल पर जाएं</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </form>
               </div>
+            )}
 
-              {/* --- PRIMARY BUTTON (Cyan Glow like Image 2) --- */}
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-3 px-4 rounded-xl font-bold text-sm bg-[#7dd3fc] hover:bg-[#a5f3fc] text-[#1e1338] transition-all duration-200 shadow-lg shadow-cyan-500/20 active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin text-neutral-900" />
-                    <span>Connecting to PostgreSQL...</span>
-                  </>
-                ) : (
-                  <span>
-                    {mode === 'login' ? 'Log In' : 'Sign Up'}
-                  </span>
-                )}
-              </button>
+            {/* ----------------------------------------------------- */}
+            {/* SCREEN 04: ADMINISTRATION (एडमिनिस्ट्रेशन पोर्टल) */}
+            {/* ----------------------------------------------------- */}
+            {activeRole === 'admin' && (
+              <div>
+                <h3 className="text-xl sm:text-2xl font-extrabold tracking-tight mb-5 text-teal-200 flex items-center gap-2">
+                  <span>Administration / एडमिनिस्ट्रेशन पोर्टल</span>
+                </h3>
 
-              {/* Divider */}
-              <div className="relative my-4 text-center">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-white/10" />
-                </div>
-                <span className="relative px-3 bg-[#291752] text-[11px] text-purple-300/70">
-                  {mode === 'login' ? "Don't have an account?" : 'Already have an account?'}
-                </span>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* Admin ID or Email */}
+                  <div>
+                    <label className="block text-xs font-semibold text-white/80 mb-1">
+                      Admin ID or Email / एडमिन आईडी या ईमेल
+                    </label>
+                    <div className="relative flex items-center">
+                      <input
+                        type="text"
+                        required
+                        value={identifier}
+                        onChange={(e) => setIdentifier(e.target.value)}
+                        placeholder="nic.admin@gov.in or ID..."
+                        className="w-full pl-3.5 pr-28 py-3 rounded-xl bg-white/15 border border-teal-400/40 text-white placeholder-white/50 text-xs sm:text-sm outline-hidden focus:border-teal-300 focus:bg-white/20 transition-all"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleVerify}
+                        className={`absolute right-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                          isVerified 
+                            ? 'bg-teal-500 text-teal-950 font-black' 
+                            : 'bg-teal-600 hover:bg-teal-500 text-white'
+                        }`}
+                      >
+                        {isVerified ? '✓ Verified' : 'Verify / सत्यापित करें'}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Password */}
+                  <div>
+                    <label className="block text-xs font-semibold text-white/80 mb-1">
+                      Password / पासवर्ड
+                    </label>
+                    <div className="relative flex items-center">
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Admin security key..."
+                        className="w-full pl-3.5 pr-10 py-3 rounded-xl bg-white/15 border border-teal-400/40 text-white placeholder-white/50 text-xs sm:text-sm outline-hidden focus:border-teal-300 focus:bg-white/20 transition-all"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 text-white/60 hover:text-white"
+                      >
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Secure Login Button */}
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 hover:brightness-110 text-neutral-950 font-black text-sm shadow-xl shadow-amber-400/30 transition-all active:scale-98 cursor-pointer flex items-center justify-center gap-2 mt-6"
+                  >
+                    <Lock className="w-4 h-4" />
+                    <span>Secure Login / सुरक्षित लॉगिन</span>
+                  </button>
+                </form>
               </div>
+            )}
 
-              {/* --- SECONDARY OUTLINE SWITCHER BUTTON (Matches Image 2) --- */}
+            {/* Quick Demo Pre-Fill Button */}
+            <div className="mt-5 pt-4 border-t border-white/15 text-center">
               <button
                 type="button"
-                onClick={() => {
-                  setMode(mode === 'login' ? 'register' : 'login')
-                  setErrorMsg('')
-                }}
-                className="w-full py-2.5 px-4 rounded-xl font-semibold text-xs text-white bg-transparent border border-white/20 hover:bg-white/10 transition-all flex items-center justify-center cursor-pointer"
+                onClick={handleQuickDemo}
+                className="text-xs text-amber-300 hover:text-amber-200 font-semibold underline underline-offset-4 cursor-pointer"
               >
-                {mode === 'login' ? 'Sign Up' : 'Log In'}
+                ⚡ Auto-fill sample credentials for {activeRole.toUpperCase()}
               </button>
-
-            </form>
+            </div>
 
           </div>
 
         </div>
 
       </div>
-
     </div>
-  )
+  );
 }

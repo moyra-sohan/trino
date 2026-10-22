@@ -1,144 +1,244 @@
-import React from 'react'
-import { Sparkles, User, ShieldCheck, Briefcase, LogOut, LayoutDashboard, Database } from 'lucide-react'
+import React, { useState } from 'react';
+import { 
+  Globe, User, LogOut, LayoutDashboard, Menu, X, 
+  Sparkles, Check, ChevronDown 
+} from 'lucide-react';
 
-export default function Navbar({ onOpenAuth, currentUser, onLogout, onNavigateSection, currentView, onGoHome }) {
+export default function Navbar({
+  content,
+  lang,
+  onChangeLanguage,
+  availableLanguages,
+  fontScale,
+  onChangeFontScale,
+  onOpenAuth,
+  currentUser,
+  onLogout,
+  onNavigateSection,
+  currentView,
+  onGoHome
+}) {
+  const [langDropdownOpen, setLangDropdownOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const nav = content?.nav || {};
+
   const roleBadgeConfig = {
-    user: { label: 'User / Investor', color: 'bg-emerald-100 text-emerald-800 border-emerald-300' },
-    operator: { label: 'Field Operator', color: 'bg-blue-100 text-blue-800 border-blue-300' },
-    admin: { label: 'Administrator', color: 'bg-purple-100 text-purple-800 border-purple-300' }
-  }
+    user: { label: 'Artisan / Citizen', color: 'bg-rose-50 text-rose-700 border-rose-200' },
+    operator: { label: 'Field Mitra', color: 'bg-blue-50 text-blue-700 border-blue-200' },
+    admin: { label: 'Admin / Govt', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' }
+  };
+
+  const navLinks = [
+    { id: 'home', label: nav.home || 'Home' },
+    { id: 'about', label: nav.about || 'About' },
+    { id: 'schemes', label: nav.schemes || 'Schemes & Support' },
+    { id: 'help', label: nav.help || 'Help' }
+  ];
+
+  const handleNavClick = (id) => {
+    onNavigateSection(id);
+    setMobileMenuOpen(false);
+  };
 
   return (
-    <header className="sticky top-0 z-50 bg-[#fffdfa]/90 backdrop-blur-md border-b border-amber-100/60 transition-all duration-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-        
-        {/* --- BRAND LOGO (Matches Rang De / NariSetu Logo) --- */}
-        <div 
-          onClick={onGoHome}
-          className="flex items-center gap-3 cursor-pointer group select-none"
-        >
-          {/* Rang De / NariSetu colorful tree / human motif */}
-          <div className="relative w-10 h-10 flex items-center justify-center">
-            <svg viewBox="0 0 48 48" className="w-10 h-10 transition-transform group-hover:scale-105">
-              {/* Colorful leaves radiating outward */}
-              <circle cx="24" cy="14" r="5" fill="#EF4444" />
-              <circle cx="16" cy="18" r="4.5" fill="#F59E0B" />
-              <circle cx="32" cy="18" r="4.5" fill="#10B981" />
-              <circle cx="13" cy="27" r="4" fill="#06B6D4" />
-              <circle cx="35" cy="27" r="4" fill="#8B5CF6" />
-              <circle cx="20" cy="9" r="3.5" fill="#EC4899" />
-              <circle cx="28" cy="9" r="3.5" fill="#F97316" />
-              {/* Central Human Figure / Trunk */}
-              <circle cx="24" cy="26" r="3" fill="#D97706" />
-              <path d="M 24 29 L 24 44 M 20 37 L 24 33 L 28 37" stroke="#92400E" strokeWidth="2.8" strokeLinecap="round" />
-            </svg>
-          </div>
-
-          <div className="flex flex-col">
-            <div className="flex items-baseline gap-1">
-              <span className="font-extrabold text-2xl tracking-tight text-neutral-900 group-hover:text-amber-900 transition-colors">
-                Nari<span className="text-[#e06543]">Setu</span>
-              </span>
-              <span className="text-[10px] font-bold uppercase tracking-widest text-amber-700/80 px-1 py-0.2 bg-amber-100 rounded">
-                Portal
-              </span>
+    <header className="sticky top-0 z-40 bg-[#fffdfa]/95 backdrop-blur-md border-b border-amber-200/60 shadow-xs">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-20">
+          
+          {/* --- BRAND / LOGO --- */}
+          <div 
+            onClick={onGoHome}
+            className="flex items-center gap-3 cursor-pointer group select-none shrink-0"
+          >
+            {/* "na" App Icon Logo */}
+            <div className="w-11 h-11 rounded-2xl overflow-hidden shadow-md shadow-orange-500/20 group-hover:scale-105 transition-transform duration-300 shrink-0">
+              <img
+                src="/images/na_icon.png"
+                alt="NariSetu na Logo"
+                className="w-full h-full object-cover"
+              />
             </div>
-            <span className="text-[10px] text-neutral-500 font-medium tracking-tight -mt-0.5">
-              Grassroots Women Empowerment
-            </span>
-          </div>
-        </div>
 
-        {/* --- NAVIGATION LINKS --- */}
-        <nav className="hidden md:flex items-center gap-8 text-[15px] font-medium text-neutral-700">
-          <button 
-            onClick={() => onNavigateSection('about')} 
-            className="hover:text-neutral-950 transition-colors cursor-pointer"
-          >
-            About Us
-          </button>
-          <button 
-            onClick={() => onNavigateSection('borrowers')} 
-            className="hover:text-neutral-950 transition-colors cursor-pointer"
-          >
-            Borrowers
-          </button>
-          <button 
-            onClick={() => onNavigateSection('calculator')} 
-            className="hover:text-neutral-950 transition-colors cursor-pointer"
-          >
-            Impact Calculator
-          </button>
-          <button 
-            onClick={() => onNavigateSection('roles')} 
-            className="hover:text-neutral-950 transition-colors cursor-pointer"
-          >
-            Portals (3 Roles)
-          </button>
-          <button 
-            onClick={() => onNavigateSection('field-trips')} 
-            className="hover:text-neutral-950 transition-colors cursor-pointer"
-          >
-            Field Trips
-          </button>
-        </nav>
-
-        {/* --- RIGHT AUTH / USER ACTIONS --- */}
-        <div className="flex items-center gap-3">
-          {currentUser ? (
-            /* Logged In State */
-            <div className="flex items-center gap-3">
-              <div className="hidden sm:flex flex-col items-end">
-                <span className="text-sm font-semibold text-neutral-800 leading-tight">
-                  {currentUser.name || currentUser.email.split('@')[0]}
+            <div className="flex flex-col">
+              <div className="flex items-center gap-1.5">
+                <span className="text-2xl font-black tracking-tight text-neutral-900 group-hover:text-amber-900 transition-colors">
+                  Nari<span className="text-[#ea580c]">Setu</span>
                 </span>
-                <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border ${roleBadgeConfig[currentUser.role]?.color || 'bg-gray-100'}`}>
-                  {roleBadgeConfig[currentUser.role]?.label || currentUser.role}
+                <span className="text-[10px] font-bold uppercase tracking-wider text-amber-800 bg-amber-100/90 px-1.5 py-0.5 rounded border border-amber-200">
+                  Govt Mandate
                 </span>
               </div>
+              <span className="text-[11px] font-medium text-neutral-500 hidden sm:block truncate max-w-xs">
+                {nav.tagline || 'Skilled Women | Stronger Communities | Brighter Future'}
+              </span>
+            </div>
+          </div>
 
+          {/* --- DESKTOP NAV LINKS --- */}
+          <nav className="hidden lg:flex items-center gap-8">
+            {navLinks.map((link) => (
               <button
-                onClick={() => onNavigateSection('dashboard')}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all shadow-sm ${
-                  currentView === 'dashboard'
-                    ? 'bg-amber-600 text-white shadow-amber-200'
-                    : 'bg-neutral-900 text-white hover:bg-neutral-800'
+                key={link.id}
+                onClick={() => handleNavClick(link.id)}
+                className="text-[15px] font-semibold text-neutral-700 hover:text-[#ea580c] transition-colors relative py-1 cursor-pointer"
+              >
+                {link.label}
+              </button>
+            ))}
+          </nav>
+
+          {/* --- RIGHT UTILITIES & AUTH --- */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            
+            {/* Font Resize Accessibility Controls: A- A A+ */}
+            <div className="hidden sm:flex items-center bg-neutral-100/80 rounded-xl p-0.5 border border-neutral-200/80 text-neutral-700">
+              <button
+                onClick={() => onChangeFontScale('small')}
+                className={`px-2 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                  fontScale === 'small' ? 'bg-white shadow-xs text-neutral-900 font-extrabold' : 'hover:bg-neutral-200/60'
                 }`}
+                title="Decrease font size"
               >
-                <LayoutDashboard className="w-4 h-4" />
-                <span>Dashboard</span>
+                A-
+              </button>
+              <button
+                onClick={() => onChangeFontScale('normal')}
+                className={`px-2 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                  fontScale === 'normal' ? 'bg-white shadow-xs text-neutral-900 font-extrabold' : 'hover:bg-neutral-200/60'
+                }`}
+                title="Default font size"
+              >
+                A
+              </button>
+              <button
+                onClick={() => onChangeFontScale('large')}
+                className={`px-2 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                  fontScale === 'large' ? 'bg-white shadow-xs text-neutral-900 font-extrabold' : 'hover:bg-neutral-200/60'
+                }`}
+                title="Increase font size"
+              >
+                A+
+              </button>
+            </div>
+
+            {/* Language Selector Dropdown */}
+            <div className="relative">
+              <button
+                onClick={() => setLangDropdownOpen(!langDropdownOpen)}
+                className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-xl bg-amber-50 text-amber-900 border border-amber-200/80 hover:bg-amber-100/70 transition-colors cursor-pointer"
+                title="Select Language"
+              >
+                <Globe className="w-3.5 h-3.5 text-amber-700" />
+                <span className="uppercase font-bold">{lang}</span>
+                <ChevronDown className="w-3 h-3 text-amber-600" />
               </button>
 
-              <button
-                onClick={onLogout}
-                title="Log out"
-                className="p-2 text-neutral-500 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors cursor-pointer"
-              >
-                <LogOut className="w-4 h-4" />
-              </button>
+              {langDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-44 bg-white rounded-2xl shadow-2xl border border-neutral-100 p-1.5 z-50 animate-in fade-in slide-in-from-top-2">
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 px-3 py-1">
+                    Select Dialect / भाषा
+                  </div>
+                  {availableLanguages.map((l) => (
+                    <button
+                      key={l.code}
+                      onClick={() => {
+                        onChangeLanguage(l.code);
+                        setLangDropdownOpen(false);
+                      }}
+                      className={`w-full flex items-center justify-between px-3 py-2 text-xs font-medium rounded-xl transition-colors cursor-pointer ${
+                        lang === l.code
+                          ? 'bg-amber-500 text-white font-bold'
+                          : 'text-neutral-700 hover:bg-neutral-100'
+                      }`}
+                    >
+                      <span className="flex items-center gap-2">
+                        <span>{l.native}</span>
+                        <span className="text-[10px] opacity-75">({l.label})</span>
+                      </span>
+                      {lang === l.code && <Check className="w-3.5 h-3.5" />}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
-          ) : (
-            /* Guest State (Exact match to Image 1 "Log in" pill button) */
-            <div className="flex items-center gap-2.5">
+
+            {/* Auth Button or Dashboard */}
+            {currentUser ? (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => onNavigateSection('dashboard')}
+                  className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all shadow-sm cursor-pointer ${
+                    currentView === 'dashboard'
+                      ? 'bg-amber-600 text-white'
+                      : 'bg-neutral-900 text-white hover:bg-neutral-800'
+                  }`}
+                >
+                  <LayoutDashboard className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Portal</span>
+                </button>
+
+                <button
+                  onClick={onLogout}
+                  title="Logout"
+                  className="p-2 rounded-xl text-neutral-500 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
               <button
-                onClick={() => onOpenAuth('login')}
-                className="px-6 py-2 rounded-full border-[1.5px] border-neutral-800 text-neutral-900 font-semibold text-[15px] hover:bg-neutral-900 hover:text-white transition-all duration-200 shadow-sm hover:shadow active:scale-95 cursor-pointer"
+                onClick={() => onOpenAuth('citizen')}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#ea580c] hover:bg-[#c2410c] text-white text-xs sm:text-sm font-bold shadow-md shadow-orange-500/20 active:scale-95 transition-all cursor-pointer"
               >
-                Log in
+                <User className="w-3.5 h-3.5" />
+                <span>Login / लॉगिन</span>
               </button>
-              
-              <button
-                onClick={() => onOpenAuth('register')}
-                className="hidden sm:inline-flex items-center gap-1.5 px-5 py-2 rounded-full bg-[#e06543] text-white font-semibold text-[14px] hover:bg-[#c95232] transition-all shadow-md shadow-orange-200 hover:shadow-orange-300 active:scale-95 cursor-pointer"
-              >
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Join NariSetu</span>
-              </button>
-            </div>
-          )}
+            )}
+
+            {/* Mobile Hamburger Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden p-2 rounded-xl text-neutral-700 hover:bg-neutral-100 transition-colors cursor-pointer"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+
+          </div>
+
         </div>
-
       </div>
+
+      {/* --- MOBILE ACCORDION MENU --- */}
+      {mobileMenuOpen && (
+        <div className="lg:hidden border-t border-amber-200/60 bg-white/98 px-4 pt-3 pb-6 space-y-3">
+          <div className="grid grid-cols-2 gap-2">
+            {navLinks.map((link) => (
+              <button
+                key={link.id}
+                onClick={() => handleNavClick(link.id)}
+                className="text-left px-3 py-2.5 rounded-xl font-bold text-sm text-neutral-800 bg-amber-50/50 hover:bg-amber-100 transition-colors"
+              >
+                {link.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="pt-2">
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenAuth('citizen');
+              }}
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#ea580c] text-white font-bold text-xs shadow-sm"
+            >
+              <User className="w-4 h-4" />
+              <span>Login / लॉगिन</span>
+            </button>
+          </div>
+        </div>
+      )}
     </header>
-  )
+  );
 }
