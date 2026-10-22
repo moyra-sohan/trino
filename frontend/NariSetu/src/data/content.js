@@ -6,8 +6,7 @@ export const content = {
       schemes: "Schemes & Support",
       help: "Help",
       tagline: "Skilled Women | Stronger Communities | Brighter Future",
-      login: "Login",
-      guestNotice: "Browsing as Guest. Welcome to NariSetu!"
+      login: "Login"
     },
     hero: {
       govBadge: "Ministry of Rural Development & Skill India Initiative",
@@ -39,8 +38,7 @@ export const content = {
           action: "Government Login",
           colorTheme: "green"
         }
-      ],
-      guestLink: "Continue as Guest →"
+      ]
     },
     features: [
       {
@@ -290,8 +288,7 @@ export const content = {
       schemes: "योजनाएं और सहायता",
       help: "सहायता केंद्र",
       tagline: "कुशल नारी | सशक्त समुदाय | उज्ज्वल भविष्य",
-      login: "लॉगिन",
-      guestNotice: "अतिथि के रूप में ब्राउज़ कर रहे हैं। नारीसेतु में आपका स्वागत है!"
+      login: "लॉगिन"
     },
     hero: {
       govBadge: "ग्रामीण विकास मंत्रालय एवं स्किल इंडिया पहल",
@@ -323,8 +320,7 @@ export const content = {
           action: "सरकारी लॉगिन",
           colorTheme: "green"
         }
-      ],
-      guestLink: "अतिथि के रूप में जारी रखें →"
+      ]
     },
     features: [
       {
@@ -550,8 +546,7 @@ export const content = {
       schemes: "সরকারি স্কিম ও সহায়তা",
       help: "সহায়তা কেন্দ্র",
       tagline: "দক্ষ নারী | শক্তিশালী সমাজ | উজ্জ্বল ভবিষ্যৎ",
-      login: "লগইন",
-      guestNotice: "অতিথি হিসেবে ব্রাউজ করছেন। নারীসেতুতে স্বাগতম!"
+      login: "লগইন"
     },
     hero: {
       govBadge: "গ্রামোন্নয়ন মন্ত্রক ও স্কিল ইন্ডিয়া উদ্যোগ",
@@ -583,8 +578,7 @@ export const content = {
           action: "সরকারি লগইন",
           colorTheme: "green"
         }
-      ],
-      guestLink: "অতিথি হিসেবে এগিয়ে যান →"
+      ]
     },
     features: [
       {
