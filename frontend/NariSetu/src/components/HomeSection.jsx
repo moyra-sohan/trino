@@ -8,7 +8,8 @@ export default function HomeSection({
   content,
   onOpenAuth,
   onShowToast,
-  onNavigate
+  onNavigate,
+  currentUser
 }) {
   const hero = content?.hero || {};
   const features = content?.features || [];
@@ -137,7 +138,13 @@ export default function HomeSection({
                 </div>
 
                 <button
-                  onClick={() => onOpenAuth('citizen')}
+                  onClick={() => {
+                    if (currentUser && currentUser.role === 'user') {
+                      onNavigate('profile');
+                    } else {
+                      onOpenAuth('citizen');
+                    }
+                  }}
                   className={`w-full py-3 px-5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 transition-all shadow-md active:scale-95 cursor-pointer ${roleCardStyles.pink.btn}`}
                 >
                   <span>{cards[0].action}</span>

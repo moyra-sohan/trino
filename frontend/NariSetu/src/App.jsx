@@ -11,7 +11,9 @@ import AuthModal from './components/AuthModal';
 import ApplyModal from './components/ApplyModal';
 import CscLocatorModal from './components/CscLocatorModal';
 
-// Dashboards
+// Dashboards & Woman Pages
+import WomanProfile from './components/WomanProfile';
+import CommunityChat from './components/CommunityChat';
 import AdminDashboard from './components/AdminDashboard';
 import OperatorDashboard from './components/OperatorDashboard';
 import UserDashboard from './components/UserDashboard';
@@ -33,11 +35,15 @@ export default function App() {
   const { lang, changeLanguage, content, availableLanguages } = useLanguage('en');
   const { scale: fontScale, setFontScale } = useAccessibility();
 
-  // Current user state (persisted via authService)
+  // Current user state (persisted via authService, null initially if not logged in)
   const [currentUser, setCurrentUser] = useState(() => authService.getCurrentUser());
 
-  // Active view: 'home' | 'dashboard'
+  // Active view: 'home' | 'profile' | 'community' | 'dashboard'
+  // Show landing page ('home') first!
   const [currentView, setCurrentView] = useState('home');
+
+  // Toggle state for Empty State simulation on Community page
+  const [simulateEmptyState, setSimulateEmptyState] = useState(false);
 
   // Modal states
   const [authModalOpen, setAuthModalOpen] = useState(false);
@@ -86,7 +92,11 @@ export default function App() {
   const handleLoginSuccess = (user) => {
     setCurrentUser(user);
     authService.setCurrentUser(user);
-    setCurrentView('dashboard');
+    if (user.role === 'user') {
+      setCurrentView('profile');
+    } else {
+      setCurrentView('dashboard');
+    }
     notify('success', `Welcome back, ${user.name || user.email}!`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -100,11 +110,40 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Smooth navigation to in-page anchors
+  // Smooth navigation
   const handleNavigateSection = (sectionId) => {
+    if (sectionId === 'profile') {
+      if (!currentUser) {
+        handleOpenAuth('citizen');
+      } else {
+        setCurrentView('profile');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      return;
+    }
+
+    if (sectionId === 'community') {
+      if (!currentUser) {
+        handleOpenAuth('citizen');
+      } else {
+        setCurrentView('community');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      return;
+    }
+
+    if (sectionId === 'home') {
+      setCurrentView('home');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
     if (sectionId === 'dashboard') {
       if (!currentUser) {
         handleOpenAuth('user');
+      } else if (currentUser.role === 'user') {
+        setCurrentView('profile');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         setCurrentView('dashboard');
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -130,8 +169,13 @@ export default function App() {
     setApplyModalOpen(true);
   };
 
+  const handleToggleSimulateEmptyState = () => {
+    setSimulateEmptyState((prev) => !prev);
+    notify('info', !simulateEmptyState ? 'Simulating Empty State for Community' : 'Restored active community chat stream');
+  };
+
   return (
-    <div className="min-h-screen bg-[#fcfaf7] text-neutral-800 flex flex-col font-sans selection:bg-amber-200 selection:text-amber-900">
+    <div className="min-h-screen bg-[#ededeb] text-neutral-800 flex flex-col font-sans selection:bg-orange-200 selection:text-orange-900">
       
       {/* ========================================================= */}
       {/* TOAST NOTIFICATIONS CONTAINER */}
@@ -167,7 +211,7 @@ export default function App() {
       </div>
 
       {/* ========================================================= */}
-      {/* TOP NAVBAR (MATCHING WIREFRAME PANEL 01) */}
+      {/* TOP NAVBAR (MATCHING WIREFRAME PANEL & BOTH SCREENSHOTS) */}
       {/* ========================================================= */}
       <Navbar
         content={content}
@@ -185,44 +229,74 @@ export default function App() {
           setCurrentView('home');
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
+        simulateEmptyState={simulateEmptyState}
+        onToggleSimulateEmptyState={handleToggleSimulateEmptyState}
       />
 
       {/* ========================================================= */}
       {/* MAIN CONTENT AREA */}
       {/* ========================================================= */}
       <main className="flex-1">
-        {currentView === 'home' ? (
+        {/* 1. WOMAN USER PROFILE VIEW (IMAGE 1) */}
+        {currentView === 'profile' && (
+          <WomanProfile
+            onNavigateToCommunity={() => {
+              setCurrentView('community');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onNotify={notify}
+          />
+        )}
+
+        {/* 2. COMMUNITY CHAT VIEW (IMAGE 2) */}
+        {currentView === 'community' && (
+          <CommunityChat
+            onNavigateToProfile={() => {
+              setCurrentView('profile');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onNotify={notify}
+            simulateEmptyStateInitial={simulateEmptyState}
+          />
+        )}
+
+        {/* 3. HOME LANDING VIEW */}
+        {currentView === 'home' && (
           <>
-            {/* 01. HOME: Hero with user background image, 3 role cards, 6 features strip, impact stats */}
             <HomeSection
               content={content}
               onOpenAuth={handleOpenAuth}
               onShowToast={(msg) => notify('info', msg)}
               onNavigate={handleNavigateSection}
+              currentUser={currentUser}
             />
 
-            {/* 02. ABOUT US: Technology empowerment, user photo mosaic, terracotta story box, 6-step flow */}
             <AboutSection
               content={content}
               onNavigate={handleNavigateSection}
               onOpenAuth={handleOpenAuth}
             />
 
-            {/* 03. SCHEMES & SUPPORT: Search, category filter, scheme cards */}
             <SchemesSection
               content={content}
               onApplyScheme={handleApplyScheme}
             />
 
-            {/* 04. HELP: Visual FAQs accordion, Talk to a Sahayika card */}
             <HelpSection
               content={content}
               onOpenCscLocator={() => setCscLocatorOpen(true)}
               onShowToast={(msg) => notify('info', msg)}
             />
+
+            <Footer
+              onOpenAuth={handleOpenAuth}
+              onNavigateSection={handleNavigateSection}
+            />
           </>
-        ) : (
-          /* DASHBOARD VIEW (Rendered according to active user role) */
+        )}
+
+        {/* 4. OTHER DASHBOARDS (ADMIN / OPERATOR) */}
+        {currentView === 'dashboard' && (
           <div className="min-h-[70vh] bg-gradient-to-b from-[#fbf8f3] to-[#f5eee6] pb-20">
             {currentUser ? (
               <>
@@ -233,18 +307,13 @@ export default function App() {
                   <OperatorDashboard currentUser={currentUser} onNotify={notify} />
                 )}
                 {currentUser.role === 'user' && (
-                  <UserDashboard
-                    currentUser={currentUser}
-                    onExploreBorrowers={() => {
-                      setCurrentView('home');
-                      setTimeout(() => handleNavigateSection('schemes'), 100);
-                    }}
+                  <WomanProfile
+                    onNavigateToCommunity={() => setCurrentView('community')}
                     onNotify={notify}
                   />
                 )}
               </>
             ) : (
-              /* AUTHENTICATION REQUIRED */
               <div className="py-20 max-w-4xl mx-auto px-4 text-center">
                 <div className="w-16 h-16 mx-auto rounded-3xl bg-amber-100 text-amber-700 flex items-center justify-center mb-6 shadow-md">
                   <ShieldCheck className="w-8 h-8" />
@@ -261,7 +330,7 @@ export default function App() {
                     onClick={() => handleOpenAuth('user')}
                     className="px-6 py-3 rounded-2xl bg-[#ea580c] hover:bg-[#c2410c] text-white font-bold text-sm shadow-md transition-all active:scale-95 cursor-pointer"
                   >
-                    Sign In
+                    Sign In as Woman Artisan
                   </button>
                   <button
                     onClick={() => setCurrentView('home')}
@@ -275,14 +344,6 @@ export default function App() {
           </div>
         )}
       </main>
-
-      {/* ========================================================= */}
-      {/* FOOTER */}
-      {/* ========================================================= */}
-      <Footer
-        onOpenAuth={handleOpenAuth}
-        onNavigateSection={handleNavigateSection}
-      />
 
       {/* ========================================================= */}
       {/* MODALS */}

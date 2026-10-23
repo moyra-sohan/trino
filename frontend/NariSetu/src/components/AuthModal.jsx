@@ -71,15 +71,17 @@ export default function AuthModal({
       let roleUser = {
         id: `${activeRole}-${timestamp}`,
         name: activeRole === 'user' 
-          ? 'Smt. Radha Devi' 
+          ? 'Aparna Ghosh' 
           : activeRole === 'operator' 
-          ? 'Rajesh Kumar (Field Mitra)'
+          ? 'Rekha Mondal (Hanskhali Operator)'
           : activeRole === 'partner'
           ? 'Ananya Sen (NGO Partner)'
           : 'Director of Rural Development',
-        email: identifier || `${activeRole}_${timestamp}@narisetu.gov.in`,
+        email: identifier || (activeRole === 'user' ? 'aparna.ghosh@narisetu.org' : `${activeRole}_${timestamp}@narisetu.gov.in`),
         role: activeRole === 'partner' ? 'operator' : activeRole,
         displayRole: activeRole,
+        avatar: activeRole === 'user' ? '/images/aparna_ghosh.jpg' : null,
+        location: activeRole === 'user' ? 'Hanskhali, Nadia' : null,
         createdAt: new Date().toISOString()
       };
 
@@ -95,7 +97,7 @@ export default function AuthModal({
   const handleQuickDemo = () => {
     if (activeRole === 'user') {
       setIdentifier('+91 98765 43210');
-      setPassword('radha@2026');
+      setPassword('aparna@2026');
       setOtp('528140');
     } else if (activeRole === 'operator') {
       setIdentifier('operator.csc104@narisetu.org');
