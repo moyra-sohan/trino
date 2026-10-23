@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   Globe, User, Users, LogOut, Menu, X, 
   Sparkles, Check, ChevronDown, MapPin, 
-  Home, ArrowLeftRight, LayoutDashboard
+  Home, ArrowLeftRight, LayoutDashboard, Building2
 } from 'lucide-react';
 
 export default function Navbar({
@@ -27,6 +27,7 @@ export default function Navbar({
 
   const nav = content?.nav || {};
   const isWomanUser = currentUser && currentUser.role === 'user';
+  const isPartnerUser = currentUser && (currentUser.role === 'partner' || currentUser.role === 'ngo');
   const isStaffUser = currentUser && (currentUser.role === 'operator' || currentUser.role === 'admin');
 
   const navLinks = [
@@ -258,7 +259,43 @@ export default function Navbar({
               </div>
             )}
 
-            {/* 4. PUBLIC UTILITIES & LOGIN BUTTON (When NOT logged in) */}
+            {/* 4. LOGGED-IN BUSINESS & NGO PARTNER (IMAGE 1-5 ENTITY) */}
+            {isPartnerUser && (
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => onNavigateSection('ngo')}
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-orange-100 hover:bg-orange-200 text-[#ea580c] text-xs font-bold transition-colors cursor-pointer shadow-2xs"
+                >
+                  <Building2 className="w-3.5 h-3.5" />
+                  <span>NGO Dashboard</span>
+                </button>
+
+                <div className="flex items-center gap-2 pl-2 border-l border-neutral-200">
+                  <div className="w-8 h-8 rounded-full bg-[#ea580c] text-white flex items-center justify-center text-xs font-black shadow-2xs">
+                    {currentUser.initials || 'RS'}
+                  </div>
+                  <div className="hidden sm:flex flex-col text-left">
+                    <span className="text-xs font-bold text-neutral-900 leading-tight">
+                      {currentUser.name}
+                    </span>
+                    <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                      <span>Verified partner</span>
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={onLogout}
+                  className="p-2 rounded-xl text-neutral-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                  title="Sign Out"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+
+            {/* 5. PUBLIC UTILITIES & LOGIN BUTTON (When NOT logged in) */}
             {!currentUser && (
               <>
                 {/* Font Resize Accessibility Controls */}
@@ -326,6 +363,16 @@ export default function Navbar({
                     </div>
                   )}
                 </div>
+
+                {/* Direct Business & NGO Portal Button */}
+                <button
+                  onClick={() => onOpenAuth('partner')}
+                  className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl border border-orange-300 bg-orange-50/80 hover:bg-orange-100/90 text-orange-900 text-xs font-bold transition-all cursor-pointer shadow-2xs"
+                  title="Business & NGO Partner Portal"
+                >
+                  <Building2 className="w-3.5 h-3.5 text-orange-600" />
+                  <span>Business & NGO</span>
+                </button>
 
                 {/* Prominent Login Button */}
                 <button
@@ -411,6 +458,21 @@ export default function Navbar({
                   </button>
                 </div>
               )}
+
+              {isPartnerUser && (
+                <div className="pt-1">
+                  <button
+                    onClick={() => {
+                      onNavigateSection('ngo');
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full p-2.5 rounded-xl font-bold text-xs text-left flex items-center gap-2 bg-orange-100 text-[#ea580c]"
+                  >
+                    <Building2 className="w-4 h-4" />
+                    <span>Business & NGO Dashboard</span>
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
             <div className="space-y-2">
@@ -426,16 +488,29 @@ export default function Navbar({
                 ))}
               </div>
 
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenAuth('citizen');
-                }}
-                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#ea580c] text-white font-bold text-xs shadow-sm cursor-pointer"
-              >
-                <User className="w-4 h-4" />
-                <span>Login / लॉगिन</span>
-              </button>
+              <div className="grid grid-cols-2 gap-2 pt-1">
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenAuth('partner');
+                  }}
+                  className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl border border-orange-300 bg-orange-50 text-orange-900 font-bold text-xs shadow-2xs cursor-pointer"
+                >
+                  <Building2 className="w-4 h-4 text-orange-600" />
+                  <span>NGO Portal</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenAuth('citizen');
+                  }}
+                  className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[#ea580c] text-white font-bold text-xs shadow-sm cursor-pointer"
+                >
+                  <User className="w-4 h-4" />
+                  <span>Login / लॉगिन</span>
+                </button>
+              </div>
             </div>
           )}
         </div>

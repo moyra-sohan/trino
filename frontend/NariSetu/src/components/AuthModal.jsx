@@ -75,13 +75,20 @@ export default function AuthModal({
           : activeRole === 'operator' 
           ? 'Rekha Mondal (Hanskhali Operator)'
           : activeRole === 'partner'
-          ? 'Ananya Sen (NGO Partner)'
+          ? 'Rural Sphere Foundation'
           : 'Director of Rural Development',
-        email: identifier || (activeRole === 'user' ? 'aparna.ghosh@narisetu.org' : `${activeRole}_${timestamp}@narisetu.gov.in`),
-        role: activeRole === 'partner' ? 'operator' : activeRole,
+        email: identifier || (activeRole === 'user' 
+          ? 'aparna.ghosh@narisetu.org' 
+          : activeRole === 'partner' 
+          ? 'partnerships@ruralsphere.org.in' 
+          : `${activeRole}_${timestamp}@narisetu.gov.in`),
+        role: activeRole,
         displayRole: activeRole,
+        status: activeRole === 'partner' ? 'Verified partner' : null,
+        initials: activeRole === 'partner' ? 'RS' : null,
+        tier: activeRole === 'partner' ? 'Tier-1 Partner' : null,
         avatar: activeRole === 'user' ? '/images/aparna_ghosh.jpg' : null,
-        location: activeRole === 'user' ? 'Hanskhali, Nadia' : null,
+        location: activeRole === 'user' ? 'Hanskhali, Nadia' : activeRole === 'partner' ? 'West Bengal & Odisha' : null,
         createdAt: new Date().toISOString()
       };
 
@@ -104,8 +111,8 @@ export default function AuthModal({
       setPassword('mitra@2026');
       setOtp('528140');
     } else if (activeRole === 'partner') {
-      setIdentifier('shg.partner@pragatifoundation.org');
-      setPassword('partner@2026');
+      setIdentifier('partnerships@ruralsphere.org.in');
+      setPassword('rural@partner2026');
     } else {
       setIdentifier('adm.director@narisetu.gov.in');
       setPassword('gov@admin2026');
