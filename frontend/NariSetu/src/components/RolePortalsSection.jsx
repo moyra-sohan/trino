@@ -1,22 +1,38 @@
 import React from 'react'
-import { User, ClipboardCheck, ShieldAlert, ArrowRight, CheckCircle2, Lock } from 'lucide-react'
+import { User, ClipboardCheck, ShieldAlert, Building2, ArrowRight, CheckCircle2, Lock } from 'lucide-react'
 
 export default function RolePortalsSection({ onOpenAuth }) {
   const roles = [
     {
       roleKey: 'user',
-      title: 'User / Social Investor',
-      badge: 'Public & Borrowers',
+      title: 'Woman Artisan / Citizen',
+      badge: 'Artisans & Borrowers',
       badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-300',
-      description: 'Lend directly to grassroots women entrepreneurs or request microloans with transparent, peer-to-peer terms.',
+      description: 'Access government schemes, connect with self-help groups, and receive direct digital orders.',
       icon: User,
       iconBg: 'bg-emerald-50 text-emerald-600 border-emerald-200',
       buttonBg: 'bg-emerald-600 hover:bg-emerald-700 text-white',
       features: [
         'Browse 100% field-verified women borrowers',
-        'Pledge loans starting from ₹1,000',
-        'Real-time automated repayment dashboard',
-        'Direct SHG community communication'
+        'Direct SHG community communication',
+        'Training enrollment & stipend tracking',
+        'Transparent digital repayment ledger'
+      ]
+    },
+    {
+      roleKey: 'partner',
+      title: 'Business & NGO Entity',
+      badge: 'NGOs & Corporates',
+      badgeColor: 'bg-orange-100 text-orange-800 border-orange-300',
+      description: 'Partner with verified women collectives, post livelihood contracts, and track impact.',
+      icon: Building2,
+      iconBg: 'bg-orange-50 text-orange-600 border-orange-200',
+      buttonBg: 'bg-[#ea580c] hover:bg-[#c2410c] text-white',
+      features: [
+        'Discover 38+ women producer collectives',
+        'Publish livelihood grants & buyer contracts',
+        'Schedule craft & digital training cohorts',
+        'Real-time socio-economic impact reports'
       ]
     },
     {
@@ -63,15 +79,15 @@ export default function RolePortalsSection({ onOpenAuth }) {
             Role-Based Architecture
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-neutral-900 mt-3 tracking-tight">
-            Tailored Experiences for 3 Distinct User Types
+            Tailored Experiences for 4 Dedicated Stakeholder Roles
           </h2>
           <p className="text-neutral-600 mt-3 text-base">
             NariSetu is built with dedicated role-based access control (RBAC). Choose your portal below to sign in with verified credentials.
           </p>
         </div>
 
-        {/* 3 Portal Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* 4 Portal Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {roles.map((r) => {
             const Icon = r.icon
             return (

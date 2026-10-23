@@ -16,6 +16,7 @@ import { WomanProfile, CommunityChat } from './components/womanUser';
 import AdminDashboard from './components/AdminDashboard';
 import OperatorDashboard from './components/OperatorDashboard';
 import UserDashboard from './components/UserDashboard';
+import { NgoPortal } from './ngoEntity';
 
 // Hooks & Services
 import { useLanguage } from './hooks/useLanguage';
@@ -37,9 +38,13 @@ export default function App() {
   // Current user state (persisted via authService, null initially if not logged in)
   const [currentUser, setCurrentUser] = useState(() => authService.getCurrentUser());
 
-  // Active view: 'home' | 'profile' | 'community' | 'dashboard'
-  // Show landing page ('home') first!
-  const [currentView, setCurrentView] = useState('home');
+  // Active view: 'home' | 'profile' | 'community' | 'dashboard' | 'ngo'
+  // Auto-restore NGO view if logged in as partner/ngo, else default to home
+  const [currentView, setCurrentView] = useState(() => {
+    const user = authService.getCurrentUser();
+    if (user?.role === 'partner' || user?.role === 'ngo') return 'ngo';
+    return 'home';
+  });
 
   // Toggle state for Empty State simulation on Community page
   const [simulateEmptyState, setSimulateEmptyState] = useState(false);
@@ -93,6 +98,8 @@ export default function App() {
     authService.setCurrentUser(user);
     if (user.role === 'user') {
       setCurrentView('profile');
+    } else if (user.role === 'partner' || user.role === 'ngo') {
+      setCurrentView('ngo');
     } else {
       setCurrentView('dashboard');
     }
@@ -111,6 +118,16 @@ export default function App() {
 
   // Smooth navigation
   const handleNavigateSection = (sectionId) => {
+    if (sectionId === 'ngo') {
+      if (!currentUser || (currentUser.role !== 'partner' && currentUser.role !== 'ngo')) {
+        handleOpenAuth('partner');
+      } else {
+        setCurrentView('ngo');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      return;
+    }
+
     if (sectionId === 'profile') {
       if (!currentUser) {
         handleOpenAuth('citizen');
@@ -142,6 +159,9 @@ export default function App() {
         handleOpenAuth('user');
       } else if (currentUser.role === 'user') {
         setCurrentView('profile');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (currentUser.role === 'partner' || currentUser.role === 'ngo') {
+        setCurrentView('ngo');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         setCurrentView('dashboard');
@@ -210,139 +230,167 @@ export default function App() {
       </div>
 
       {/* ========================================================= */}
-      {/* TOP NAVBAR (MATCHING WIREFRAME PANEL & BOTH SCREENSHOTS) */}
+      {/* 5. BUSINESS & NGO ENTITY PORTAL (MATCHING SCREENSHOTS 1-5) */}
       {/* ========================================================= */}
-      <Navbar
-        content={content}
-        lang={lang}
-        onChangeLanguage={changeLanguage}
-        availableLanguages={availableLanguages}
-        fontScale={fontScale}
-        onChangeFontScale={setFontScale}
-        onOpenAuth={handleOpenAuth}
-        currentUser={currentUser}
-        onLogout={handleLogout}
-        onNavigateSection={handleNavigateSection}
-        currentView={currentView}
-        onGoHome={() => {
-          setCurrentView('home');
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }}
-        simulateEmptyState={simulateEmptyState}
-        onToggleSimulateEmptyState={handleToggleSimulateEmptyState}
-      />
-
-      {/* ========================================================= */}
-      {/* MAIN CONTENT AREA */}
-      {/* ========================================================= */}
-      <main className="flex-1">
-        {/* 1. WOMAN USER PROFILE VIEW (IMAGE 1) */}
-        {currentView === 'profile' && (
-          <WomanProfile
-            onNavigateToCommunity={() => {
-              setCurrentView('community');
+      {currentView === 'ngo' ? (
+        <NgoPortal
+          currentUser={currentUser}
+          onNotify={notify}
+          onLogout={handleLogout}
+          onGoHome={() => {
+            setCurrentView('home');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+        />
+      ) : (
+        <>
+          {/* ========================================================= */}
+          {/* TOP NAVBAR (MATCHING WIREFRAME PANEL & BOTH SCREENSHOTS) */}
+          {/* ========================================================= */}
+          <Navbar
+            content={content}
+            lang={lang}
+            onChangeLanguage={changeLanguage}
+            availableLanguages={availableLanguages}
+            fontScale={fontScale}
+            onChangeFontScale={setFontScale}
+            onOpenAuth={handleOpenAuth}
+            currentUser={currentUser}
+            onLogout={handleLogout}
+            onNavigateSection={handleNavigateSection}
+            currentView={currentView}
+            onGoHome={() => {
+              setCurrentView('home');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
-            onNotify={notify}
+            simulateEmptyState={simulateEmptyState}
+            onToggleSimulateEmptyState={handleToggleSimulateEmptyState}
           />
-        )}
 
-        {/* 2. COMMUNITY CHAT VIEW (IMAGE 2) */}
-        {currentView === 'community' && (
-          <CommunityChat
-            onNavigateToProfile={() => {
-              setCurrentView('profile');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-            onNotify={notify}
-            simulateEmptyStateInitial={simulateEmptyState}
-          />
-        )}
+          {/* ========================================================= */}
+          {/* MAIN CONTENT AREA */}
+          {/* ========================================================= */}
+          <main className="flex-1">
+            {/* 1. WOMAN USER PROFILE VIEW (IMAGE 1) */}
+            {currentView === 'profile' && (
+              <WomanProfile
+                onNavigateToCommunity={() => {
+                  setCurrentView('community');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                onNotify={notify}
+              />
+            )}
 
-        {/* 3. HOME LANDING VIEW */}
-        {currentView === 'home' && (
-          <>
-            <HomeSection
-              content={content}
-              onOpenAuth={handleOpenAuth}
-              onShowToast={(msg) => notify('info', msg)}
-              onNavigate={handleNavigateSection}
-              currentUser={currentUser}
-            />
+            {/* 2. COMMUNITY CHAT VIEW (IMAGE 2) */}
+            {currentView === 'community' && (
+              <CommunityChat
+                onNavigateToProfile={() => {
+                  setCurrentView('profile');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                onNotify={notify}
+                simulateEmptyStateInitial={simulateEmptyState}
+              />
+            )}
 
-            <AboutSection
-              content={content}
-              onNavigate={handleNavigateSection}
-              onOpenAuth={handleOpenAuth}
-            />
-
-            <SchemesSection
-              content={content}
-              onApplyScheme={handleApplyScheme}
-            />
-
-            <HelpSection
-              content={content}
-              onOpenCscLocator={() => setCscLocatorOpen(true)}
-              onShowToast={(msg) => notify('info', msg)}
-            />
-
-            <Footer
-              onOpenAuth={handleOpenAuth}
-              onNavigateSection={handleNavigateSection}
-            />
-          </>
-        )}
-
-        {/* 4. OTHER DASHBOARDS (ADMIN / OPERATOR) */}
-        {currentView === 'dashboard' && (
-          <div className="min-h-[70vh] bg-gradient-to-b from-[#fbf8f3] to-[#f5eee6] pb-20">
-            {currentUser ? (
+            {/* 3. HOME LANDING VIEW */}
+            {currentView === 'home' && (
               <>
-                {currentUser.role === 'admin' && (
-                  <AdminDashboard currentUser={currentUser} onNotify={notify} />
-                )}
-                {currentUser.role === 'operator' && (
-                  <OperatorDashboard currentUser={currentUser} onNotify={notify} />
-                )}
-                {currentUser.role === 'user' && (
-                  <WomanProfile
-                    onNavigateToCommunity={() => setCurrentView('community')}
-                    onNotify={notify}
-                  />
-                )}
-              </>
-            ) : (
-              <div className="py-20 max-w-4xl mx-auto px-4 text-center">
-                <div className="w-16 h-16 mx-auto rounded-3xl bg-amber-100 text-amber-700 flex items-center justify-center mb-6 shadow-md">
-                  <ShieldCheck className="w-8 h-8" />
-                </div>
-                <h2 className="text-3xl font-extrabold text-neutral-900 tracking-tight">
-                  Authentication Required
-                </h2>
-                <p className="text-neutral-600 max-w-md mx-auto mt-2 text-sm">
-                  Please sign in with your verified credentials to access your role-based portal.
-                </p>
+                <HomeSection
+                  content={content}
+                  onOpenAuth={handleOpenAuth}
+                  onShowToast={(msg) => notify('info', msg)}
+                  onNavigate={handleNavigateSection}
+                  currentUser={currentUser}
+                />
 
-                <div className="mt-8 flex justify-center gap-4">
-                  <button
-                    onClick={() => handleOpenAuth('user')}
-                    className="px-6 py-3 rounded-2xl bg-[#ea580c] hover:bg-[#c2410c] text-white font-bold text-sm shadow-md transition-all active:scale-95 cursor-pointer"
-                  >
-                    Sign In as Woman Artisan
-                  </button>
-                  <button
-                    onClick={() => setCurrentView('home')}
-                    className="px-6 py-3 rounded-2xl bg-white border border-neutral-300 hover:bg-neutral-50 text-neutral-800 font-bold text-sm shadow-xs transition-all cursor-pointer"
-                  >
-                    Back to Home
-                  </button>
-                </div>
+                <AboutSection
+                  content={content}
+                  onNavigate={handleNavigateSection}
+                  onOpenAuth={handleOpenAuth}
+                />
+
+                <SchemesSection
+                  content={content}
+                  onApplyScheme={handleApplyScheme}
+                />
+
+                <HelpSection
+                  content={content}
+                  onOpenCscLocator={() => setCscLocatorOpen(true)}
+                  onShowToast={(msg) => notify('info', msg)}
+                />
+
+                <Footer
+                  onOpenAuth={handleOpenAuth}
+                  onNavigateSection={handleNavigateSection}
+                />
+              </>
+            )}
+
+            {/* 4. OTHER DASHBOARDS (ADMIN / OPERATOR / PARTNER) */}
+            {currentView === 'dashboard' && (
+              <div className="min-h-[70vh] bg-gradient-to-b from-[#fbf8f3] to-[#f5eee6] pb-20">
+                {currentUser ? (
+                  <>
+                    {(currentUser.role === 'partner' || currentUser.role === 'ngo') && (
+                      <NgoPortal
+                        currentUser={currentUser}
+                        onNotify={notify}
+                        onLogout={handleLogout}
+                        onGoHome={() => {
+                          setCurrentView('home');
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
+                      />
+                    )}
+                    {currentUser.role === 'admin' && (
+                      <AdminDashboard currentUser={currentUser} onNotify={notify} />
+                    )}
+                    {currentUser.role === 'operator' && (
+                      <OperatorDashboard currentUser={currentUser} onNotify={notify} />
+                    )}
+                    {currentUser.role === 'user' && (
+                      <WomanProfile
+                        onNavigateToCommunity={() => setCurrentView('community')}
+                        onNotify={notify}
+                      />
+                    )}
+                  </>
+                ) : (
+                  <div className="py-20 max-w-4xl mx-auto px-4 text-center">
+                    <div className="w-16 h-16 mx-auto rounded-3xl bg-amber-100 text-amber-700 flex items-center justify-center mb-6 shadow-md">
+                      <ShieldCheck className="w-8 h-8" />
+                    </div>
+                    <h2 className="text-3xl font-extrabold text-neutral-900 tracking-tight">
+                      Authentication Required
+                    </h2>
+                    <p className="text-neutral-600 max-w-md mx-auto mt-2 text-sm">
+                      Please sign in with your verified credentials to access your role-based portal.
+                    </p>
+
+                    <div className="mt-8 flex justify-center gap-4">
+                      <button
+                        onClick={() => handleOpenAuth('user')}
+                        className="px-6 py-3 rounded-2xl bg-[#ea580c] hover:bg-[#c2410c] text-white font-bold text-sm shadow-md transition-all active:scale-95 cursor-pointer"
+                      >
+                        Sign In as Woman Artisan
+                      </button>
+                      <button
+                        onClick={() => handleOpenAuth('partner')}
+                        className="px-6 py-3 rounded-2xl bg-white border border-neutral-300 hover:bg-neutral-50 text-neutral-800 font-bold text-sm shadow-xs transition-all cursor-pointer"
+                      >
+                        Sign In as NGO Partner
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
-          </div>
-        )}
-      </main>
+          </main>
+        </>
+      )}
 
       {/* ========================================================= */}
       {/* MODALS */}
