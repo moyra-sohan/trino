@@ -104,7 +104,7 @@ export default function App() {
   const handleNavigateSection = (sectionId) => {
     if (sectionId === 'dashboard') {
       if (!currentUser) {
-        handleOpenAuth('login');
+        handleOpenAuth('user');
       } else {
         setCurrentView('dashboard');
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -244,50 +244,30 @@ export default function App() {
                 )}
               </>
             ) : (
-              /* GUEST DASHBOARD GATEWAY */
+              /* AUTHENTICATION REQUIRED */
               <div className="py-20 max-w-4xl mx-auto px-4 text-center">
                 <div className="w-16 h-16 mx-auto rounded-3xl bg-amber-100 text-amber-700 flex items-center justify-center mb-6 shadow-md">
                   <ShieldCheck className="w-8 h-8" />
                 </div>
                 <h2 className="text-3xl font-extrabold text-neutral-900 tracking-tight">
-                  Access Role-Based Workspace
+                  Authentication Required
                 </h2>
                 <p className="text-neutral-600 max-w-md mx-auto mt-2 text-sm">
-                  Please log in to your designated portal.
+                  Please sign in with your verified credentials to access your role-based portal.
                 </p>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 max-w-2xl mx-auto">
+                <div className="mt-8 flex justify-center gap-4">
                   <button
-                    onClick={() => handleOpenAuth('citizen')}
-                    className="p-6 rounded-2xl bg-white border border-rose-200 hover:border-rose-400 shadow-sm hover:shadow-md transition-all text-left cursor-pointer"
+                    onClick={() => handleOpenAuth('user')}
+                    className="px-6 py-3 rounded-2xl bg-[#ea580c] hover:bg-[#c2410c] text-white font-bold text-sm shadow-md transition-all active:scale-95 cursor-pointer"
                   >
-                    <div className="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center mb-3">
-                      <User className="w-5 h-5" />
-                    </div>
-                    <h3 className="font-bold text-neutral-900">Artisan / Citizen</h3>
-                    <p className="text-xs text-neutral-500 mt-1">Citizen Login & tracking</p>
+                    Sign In
                   </button>
-
                   <button
-                    onClick={() => handleOpenAuth('partner')}
-                    className="p-6 rounded-2xl bg-white border border-blue-200 hover:border-blue-400 shadow-sm hover:shadow-md transition-all text-left cursor-pointer"
+                    onClick={() => setCurrentView('home')}
+                    className="px-6 py-3 rounded-2xl bg-white border border-neutral-300 hover:bg-neutral-50 text-neutral-800 font-bold text-sm shadow-xs transition-all cursor-pointer"
                   >
-                    <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center mb-3">
-                      <ClipboardCheck className="w-5 h-5" />
-                    </div>
-                    <h3 className="font-bold text-neutral-900">Partner & Operator</h3>
-                    <p className="text-xs text-neutral-500 mt-1">Field Mitra & NGO Portal</p>
-                  </button>
-
-                  <button
-                    onClick={() => handleOpenAuth('gov')}
-                    className="p-6 rounded-2xl bg-white border border-emerald-200 hover:border-emerald-400 shadow-sm hover:shadow-md transition-all text-left cursor-pointer"
-                  >
-                    <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-3">
-                      <ShieldAlert className="w-5 h-5" />
-                    </div>
-                    <h3 className="font-bold text-neutral-900">Admin / Govt Official</h3>
-                    <p className="text-xs text-neutral-500 mt-1">Administration Portal</p>
+                    Back to Home
                   </button>
                 </div>
               </div>

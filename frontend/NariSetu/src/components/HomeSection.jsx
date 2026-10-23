@@ -208,19 +208,6 @@ export default function HomeSection({
 
           </div>
 
-          {/* Guest Access Link from Wireframe */}
-          <div className="mt-8 text-center sm:text-left">
-            <button
-              onClick={() => {
-                onShowToast("Browsing as Guest. You have full access to view schemes and resources!");
-                onNavigate('schemes');
-              }}
-              className="inline-flex items-center gap-2 font-bold text-sm text-neutral-800 hover:text-[#ea580c] transition-colors underline underline-offset-4 decoration-amber-400 cursor-pointer"
-            >
-              <span>{hero.guestLink || 'Continue as Guest →'}</span>
-            </button>
-          </div>
-
         </div>
       </div>
 
