@@ -12,8 +12,7 @@ import ApplyModal from './components/ApplyModal';
 import CscLocatorModal from './components/CscLocatorModal';
 
 // Dashboards & Woman Pages
-import WomanProfile from './components/WomanProfile';
-import CommunityChat from './components/CommunityChat';
+import { WomanProfile, CommunityChat } from './components/womanUser';
 import AdminDashboard from './components/AdminDashboard';
 import OperatorDashboard from './components/OperatorDashboard';
 import UserDashboard from './components/UserDashboard';
