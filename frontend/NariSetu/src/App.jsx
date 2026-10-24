@@ -4,6 +4,7 @@ import HomeSection from './components/HomeSection';
 import AboutSection from './components/AboutSection';
 import SchemesSection from './components/SchemesSection';
 import HelpSection from './components/HelpSection';
+import RolePortalsSection from './components/RolePortalsSection';
 import Footer from './components/Footer';
 
 // Modals
@@ -17,7 +18,7 @@ import AdminDashboard from './components/AdminDashboard';
 import OperatorDashboard from './components/OperatorDashboard';
 import UserDashboard from './components/UserDashboard';
 import { NgoPortal } from './ngoEntity';
-import { AdminPortal } from './components/adminEntity';
+import { OperatorPortal } from './operatorEntity';
 
 // Hooks & Services
 import { useLanguage } from './hooks/useLanguage';
@@ -39,12 +40,13 @@ export default function App() {
   // Current user state (persisted via authService, null initially if not logged in)
   const [currentUser, setCurrentUser] = useState(() => authService.getCurrentUser());
 
-  // Active view: 'home' | 'profile' | 'community' | 'dashboard' | 'ngo' | 'admin'
-  // Auto-restore view based on logged in role, else default to home
+  // Active view: 'home' | 'profile' | 'community' | 'dashboard' | 'ngo' | 'operator'
+  // Auto-restore view if logged in as partner/ngo or operator, else default to home
   const [currentView, setCurrentView] = useState(() => {
     const user = authService.getCurrentUser();
     if (user?.role === 'admin') return 'admin';
     if (user?.role === 'partner' || user?.role === 'ngo') return 'ngo';
+    if (user?.role === 'operator') return 'operator';
     return 'home';
   });
 
@@ -102,8 +104,8 @@ export default function App() {
       setCurrentView('profile');
     } else if (user.role === 'partner' || user.role === 'ngo') {
       setCurrentView('ngo');
-    } else if (user.role === 'admin') {
-      setCurrentView('admin');
+    } else if (user.role === 'operator') {
+      setCurrentView('operator');
     } else {
       setCurrentView('dashboard');
     }
@@ -122,9 +124,13 @@ export default function App() {
 
   // Smooth navigation
   const handleNavigateSection = (sectionId) => {
-    if (sectionId === 'admin') {
-      setCurrentView('admin');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (sectionId === 'operator') {
+      if (!currentUser || currentUser.role !== 'operator') {
+        handleOpenAuth('operator');
+      } else {
+        setCurrentView('operator');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
       return;
     }
 
@@ -172,6 +178,9 @@ export default function App() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else if (currentUser.role === 'partner' || currentUser.role === 'ngo') {
         setCurrentView('ngo');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (currentUser.role === 'operator') {
+        setCurrentView('operator');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         setCurrentView('dashboard');
@@ -240,10 +249,10 @@ export default function App() {
       </div>
 
       {/* ========================================================= */}
-      {/* 5. ADMIN ENTITY PORTAL (MATCHING SCREENSHOTS 1-5) */}
+      {/* 5. DATA ENTRY OPERATOR ENTITY PORTAL (MATCHING SCREENSHOTS 1-5) */}
       {/* ========================================================= */}
-      {currentView === 'admin' ? (
-        <AdminPortal
+      {currentView === 'operator' ? (
+        <OperatorPortal
           currentUser={currentUser}
           onNotify={notify}
           onLogout={handleLogout}
@@ -325,6 +334,8 @@ export default function App() {
                   currentUser={currentUser}
                 />
 
+                <RolePortalsSection onOpenAuth={handleOpenAuth} />
+
                 <AboutSection
                   content={content}
                   onNavigate={handleNavigateSection}
@@ -374,7 +385,15 @@ export default function App() {
                       />
                     )}
                     {currentUser.role === 'operator' && (
-                      <OperatorDashboard currentUser={currentUser} onNotify={notify} />
+                      <OperatorPortal
+                        currentUser={currentUser}
+                        onNotify={notify}
+                        onLogout={handleLogout}
+                        onGoHome={() => {
+                          setCurrentView('home');
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
+                      />
                     )}
                     {currentUser.role === 'user' && (
                       <WomanProfile

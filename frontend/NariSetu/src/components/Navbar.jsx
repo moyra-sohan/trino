@@ -29,8 +29,8 @@ export default function Navbar({
   const nav = content?.nav || {};
   const isWomanUser = currentUser && currentUser.role === 'user';
   const isPartnerUser = currentUser && (currentUser.role === 'partner' || currentUser.role === 'ngo');
-  const isAdminUser = currentUser && currentUser.role === 'admin';
   const isOperatorUser = currentUser && currentUser.role === 'operator';
+  const isAdminUser = currentUser && currentUser.role === 'admin';
   const isStaffUser = currentUser && (currentUser.role === 'operator' || currentUser.role === 'admin');
 
   const navLinks = [
@@ -242,31 +242,28 @@ export default function Navbar({
               </>
             )}
 
-            {/* 3. LOGGED-IN ADMINISTRATOR USER */}
-            {isAdminUser && (
-              <div className="flex items-center gap-2 sm:gap-3">
+            {/* 3. LOGGED-IN OPERATOR (FIELD DATA ENTRY CONSOLE) */}
+            {isOperatorUser && (
+              <div className="flex items-center gap-3">
                 <button
-                  onClick={() => onNavigateSection('admin')}
-                  className={`flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs ${
-                    currentView === 'admin'
-                      ? 'bg-[#064e3b] text-white shadow-emerald-950/20 ring-1 ring-emerald-500'
-                      : 'bg-[#dcfce7] hover:bg-[#bbf7d0] text-[#14532d]'
-                  }`}
-                  title="Open Administration Console"
+                  onClick={() => onNavigateSection('operator')}
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-orange-100 hover:bg-orange-200 text-[#ea580c] text-xs font-bold transition-colors cursor-pointer shadow-2xs"
                 >
-                  <Shield className="w-3.5 h-3.5" />
-                  <span>Admin Console</span>
+                  <LayoutDashboard className="w-3.5 h-3.5" />
+                  <span>Operator Console</span>
                 </button>
 
                 <div className="flex items-center gap-2 pl-2 border-l border-neutral-200">
-                  <div className="w-8 h-8 rounded-full bg-[#16382b] text-white flex items-center justify-center text-xs font-black shadow-2xs">
-                    AD
+                  <div className="w-8 h-8 rounded-full bg-amber-200 text-amber-900 border border-amber-300 flex items-center justify-center text-xs font-black shadow-2xs">
+                    {currentUser.avatarInitials || 'RM'}
                   </div>
-                  <div className="hidden sm:flex flex-col text-left leading-tight">
-                    <span className="text-xs font-bold text-neutral-900">Administrator</span>
+                  <div className="hidden sm:flex flex-col text-left">
+                    <span className="text-xs font-bold text-neutral-900 leading-tight">
+                      {currentUser.name || 'Smt. Rekha Mondal'}
+                    </span>
                     <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                      <span>Security Team</span>
+                      <span>Hanskhali Operator (OP-8492)</span>
                     </span>
                   </div>
                 </div>
@@ -281,15 +278,15 @@ export default function Navbar({
               </div>
             )}
 
-            {/* 3B. LOGGED-IN OPERATOR USER */}
-            {isOperatorUser && (
+            {/* 3B. LOGGED-IN ADMIN */}
+            {isAdminUser && (
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => onNavigateSection('dashboard')}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-neutral-800 text-xs font-bold transition-colors cursor-pointer"
                 >
                   <LayoutDashboard className="w-3.5 h-3.5" />
-                  <span>Operator Dashboard</span>
+                  <span>Admin Dashboard</span>
                 </button>
                 <button
                   onClick={onLogout}
