@@ -76,19 +76,19 @@ export default function AuthModal({
           ? 'Rekha Mondal (Hanskhali Operator)'
           : activeRole === 'partner'
           ? 'Rural Sphere Foundation'
-          : 'Director of Rural Development',
+          : 'Administrator',
         email: identifier || (activeRole === 'user' 
           ? 'aparna.ghosh@narisetu.org' 
           : activeRole === 'partner' 
           ? 'partnerships@ruralsphere.org.in' 
-          : `${activeRole}_${timestamp}@narisetu.gov.in`),
+          : 'admin@narisetu.gov.in'),
         role: activeRole,
         displayRole: activeRole,
-        status: activeRole === 'partner' ? 'Verified partner' : null,
-        initials: activeRole === 'partner' ? 'RS' : null,
-        tier: activeRole === 'partner' ? 'Tier-1 Partner' : null,
+        status: activeRole === 'partner' ? 'Verified partner' : activeRole === 'admin' ? 'Security & Verification team' : null,
+        initials: activeRole === 'partner' ? 'RS' : activeRole === 'admin' ? 'AD' : null,
+        tier: activeRole === 'partner' ? 'Tier-1 Partner' : activeRole === 'admin' ? 'Superadmin' : null,
         avatar: activeRole === 'user' ? '/images/aparna_ghosh.jpg' : null,
-        location: activeRole === 'user' ? 'Hanskhali, Nadia' : activeRole === 'partner' ? 'West Bengal & Odisha' : null,
+        location: activeRole === 'user' ? 'Hanskhali, Nadia' : activeRole === 'partner' ? 'West Bengal & Odisha' : 'State Livelihoods Mission, Kolkata',
         createdAt: new Date().toISOString()
       };
 

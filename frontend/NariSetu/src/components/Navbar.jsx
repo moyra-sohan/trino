@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { 
   Globe, User, Users, LogOut, Menu, X, 
   Sparkles, Check, ChevronDown, MapPin, 
-  Home, ArrowLeftRight, LayoutDashboard, Building2
+  Home, ArrowLeftRight, LayoutDashboard, Building2,
+  Shield, ShieldCheck
 } from 'lucide-react';
 
 export default function Navbar({
@@ -28,6 +29,8 @@ export default function Navbar({
   const nav = content?.nav || {};
   const isWomanUser = currentUser && currentUser.role === 'user';
   const isPartnerUser = currentUser && (currentUser.role === 'partner' || currentUser.role === 'ngo');
+  const isAdminUser = currentUser && currentUser.role === 'admin';
+  const isOperatorUser = currentUser && currentUser.role === 'operator';
   const isStaffUser = currentUser && (currentUser.role === 'operator' || currentUser.role === 'admin');
 
   const navLinks = [
@@ -239,19 +242,58 @@ export default function Navbar({
               </>
             )}
 
-            {/* 3. LOGGED-IN STAFF USER (OPERATOR / ADMIN) */}
-            {isStaffUser && (
+            {/* 3. LOGGED-IN ADMINISTRATOR USER */}
+            {isAdminUser && (
+              <div className="flex items-center gap-2 sm:gap-3">
+                <button
+                  onClick={() => onNavigateSection('admin')}
+                  className={`flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-2xs ${
+                    currentView === 'admin'
+                      ? 'bg-[#064e3b] text-white shadow-emerald-950/20 ring-1 ring-emerald-500'
+                      : 'bg-[#dcfce7] hover:bg-[#bbf7d0] text-[#14532d]'
+                  }`}
+                  title="Open Administration Console"
+                >
+                  <Shield className="w-3.5 h-3.5" />
+                  <span>Admin Console</span>
+                </button>
+
+                <div className="flex items-center gap-2 pl-2 border-l border-neutral-200">
+                  <div className="w-8 h-8 rounded-full bg-[#16382b] text-white flex items-center justify-center text-xs font-black shadow-2xs">
+                    AD
+                  </div>
+                  <div className="hidden sm:flex flex-col text-left leading-tight">
+                    <span className="text-xs font-bold text-neutral-900">Administrator</span>
+                    <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                      <span>Security Team</span>
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={onLogout}
+                  className="p-2 rounded-xl text-neutral-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                  title="Sign Out"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+
+            {/* 3B. LOGGED-IN OPERATOR USER */}
+            {isOperatorUser && (
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => onNavigateSection('dashboard')}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-neutral-800 text-xs font-bold transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-neutral-800 text-xs font-bold transition-colors cursor-pointer"
                 >
                   <LayoutDashboard className="w-3.5 h-3.5" />
-                  <span>Dashboard</span>
+                  <span>Operator Dashboard</span>
                 </button>
                 <button
                   onClick={onLogout}
-                  className="p-2 rounded-xl text-neutral-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+                  className="p-2 rounded-xl text-neutral-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
                   title="Sign Out"
                 >
                   <LogOut className="w-4 h-4" />
@@ -374,6 +416,16 @@ export default function Navbar({
                   <span>Business & NGO</span>
                 </button>
 
+                {/* Direct Admin Console Button */}
+                <button
+                  onClick={() => onNavigateSection('admin')}
+                  className="hidden md:flex items-center gap-1.5 px-3 py-2 rounded-xl border border-emerald-300 bg-emerald-50/80 hover:bg-emerald-100/90 text-[#064e3b] text-xs font-bold transition-all cursor-pointer shadow-2xs"
+                  title="Administration Portal"
+                >
+                  <Shield className="w-3.5 h-3.5 text-emerald-700" />
+                  <span>Admin Console</span>
+                </button>
+
                 {/* Prominent Login Button */}
                 <button
                   onClick={() => onOpenAuth('citizen')}
@@ -473,6 +525,21 @@ export default function Navbar({
                   </button>
                 </div>
               )}
+
+              {isAdminUser && (
+                <div className="pt-1">
+                  <button
+                    onClick={() => {
+                      onNavigateSection('admin');
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full p-2.5 rounded-xl font-bold text-xs text-left flex items-center gap-2 bg-[#dcfce7] text-[#14532d]"
+                  >
+                    <Shield className="w-4 h-4 text-emerald-700" />
+                    <span>Admin Console (Overview, Verifications)</span>
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
             <div className="space-y-2">
@@ -511,6 +578,17 @@ export default function Navbar({
                   <span>Login / लॉगिन</span>
                 </button>
               </div>
+
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onNavigateSection('admin');
+                }}
+                className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-900 font-bold text-xs shadow-2xs cursor-pointer mt-1"
+              >
+                <Shield className="w-4 h-4 text-emerald-700" />
+                <span>Admin Console</span>
+              </button>
             </div>
           )}
         </div>

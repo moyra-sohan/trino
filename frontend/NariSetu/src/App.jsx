@@ -17,6 +17,7 @@ import AdminDashboard from './components/AdminDashboard';
 import OperatorDashboard from './components/OperatorDashboard';
 import UserDashboard from './components/UserDashboard';
 import { NgoPortal } from './ngoEntity';
+import { AdminPortal } from './components/adminEntity';
 
 // Hooks & Services
 import { useLanguage } from './hooks/useLanguage';
@@ -38,10 +39,11 @@ export default function App() {
   // Current user state (persisted via authService, null initially if not logged in)
   const [currentUser, setCurrentUser] = useState(() => authService.getCurrentUser());
 
-  // Active view: 'home' | 'profile' | 'community' | 'dashboard' | 'ngo'
-  // Auto-restore NGO view if logged in as partner/ngo, else default to home
+  // Active view: 'home' | 'profile' | 'community' | 'dashboard' | 'ngo' | 'admin'
+  // Auto-restore view based on logged in role, else default to home
   const [currentView, setCurrentView] = useState(() => {
     const user = authService.getCurrentUser();
+    if (user?.role === 'admin') return 'admin';
     if (user?.role === 'partner' || user?.role === 'ngo') return 'ngo';
     return 'home';
   });
@@ -100,6 +102,8 @@ export default function App() {
       setCurrentView('profile');
     } else if (user.role === 'partner' || user.role === 'ngo') {
       setCurrentView('ngo');
+    } else if (user.role === 'admin') {
+      setCurrentView('admin');
     } else {
       setCurrentView('dashboard');
     }
@@ -118,6 +122,12 @@ export default function App() {
 
   // Smooth navigation
   const handleNavigateSection = (sectionId) => {
+    if (sectionId === 'admin') {
+      setCurrentView('admin');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
     if (sectionId === 'ngo') {
       if (!currentUser || (currentUser.role !== 'partner' && currentUser.role !== 'ngo')) {
         handleOpenAuth('partner');
@@ -230,9 +240,19 @@ export default function App() {
       </div>
 
       {/* ========================================================= */}
-      {/* 5. BUSINESS & NGO ENTITY PORTAL (MATCHING SCREENSHOTS 1-5) */}
+      {/* 5. ADMIN ENTITY PORTAL (MATCHING SCREENSHOTS 1-5) */}
       {/* ========================================================= */}
-      {currentView === 'ngo' ? (
+      {currentView === 'admin' ? (
+        <AdminPortal
+          currentUser={currentUser}
+          onNotify={notify}
+          onLogout={handleLogout}
+          onGoHome={() => {
+            setCurrentView('home');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+        />
+      ) : currentView === 'ngo' ? (
         <NgoPortal
           currentUser={currentUser}
           onNotify={notify}
@@ -346,7 +366,12 @@ export default function App() {
                       />
                     )}
                     {currentUser.role === 'admin' && (
-                      <AdminDashboard currentUser={currentUser} onNotify={notify} />
+                      <AdminPortal
+                        currentUser={currentUser}
+                        onNotify={notify}
+                        onLogout={handleLogout}
+                        onGoHome={() => setCurrentView('home')}
+                      />
                     )}
                     {currentUser.role === 'operator' && (
                       <OperatorDashboard currentUser={currentUser} onNotify={notify} />
