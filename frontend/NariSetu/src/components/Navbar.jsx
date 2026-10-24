@@ -28,6 +28,8 @@ export default function Navbar({
   const nav = content?.nav || {};
   const isWomanUser = currentUser && currentUser.role === 'user';
   const isPartnerUser = currentUser && (currentUser.role === 'partner' || currentUser.role === 'ngo');
+  const isOperatorUser = currentUser && currentUser.role === 'operator';
+  const isAdminUser = currentUser && currentUser.role === 'admin';
   const isStaffUser = currentUser && (currentUser.role === 'operator' || currentUser.role === 'admin');
 
   const navLinks = [
@@ -239,15 +241,51 @@ export default function Navbar({
               </>
             )}
 
-            {/* 3. LOGGED-IN STAFF USER (OPERATOR / ADMIN) */}
-            {isStaffUser && (
+            {/* 3. LOGGED-IN OPERATOR (FIELD DATA ENTRY CONSOLE) */}
+            {isOperatorUser && (
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => onNavigateSection('operator')}
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-orange-100 hover:bg-orange-200 text-[#ea580c] text-xs font-bold transition-colors cursor-pointer shadow-2xs"
+                >
+                  <LayoutDashboard className="w-3.5 h-3.5" />
+                  <span>Operator Console</span>
+                </button>
+
+                <div className="flex items-center gap-2 pl-2 border-l border-neutral-200">
+                  <div className="w-8 h-8 rounded-full bg-amber-200 text-amber-900 border border-amber-300 flex items-center justify-center text-xs font-black shadow-2xs">
+                    {currentUser.avatarInitials || 'RM'}
+                  </div>
+                  <div className="hidden sm:flex flex-col text-left">
+                    <span className="text-xs font-bold text-neutral-900 leading-tight">
+                      {currentUser.name || 'Smt. Rekha Mondal'}
+                    </span>
+                    <span className="text-[10px] text-emerald-600 font-semibold flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                      <span>Hanskhali Operator (OP-8492)</span>
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={onLogout}
+                  className="p-2 rounded-xl text-neutral-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                  title="Sign Out"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+
+            {/* 3B. LOGGED-IN ADMIN */}
+            {isAdminUser && (
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => onNavigateSection('dashboard')}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-neutral-800 text-xs font-bold transition-colors"
                 >
                   <LayoutDashboard className="w-3.5 h-3.5" />
-                  <span>Dashboard</span>
+                  <span>Admin Dashboard</span>
                 </button>
                 <button
                   onClick={onLogout}

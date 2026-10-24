@@ -82,5 +82,35 @@ export const api = {
     return apiRequest(`/api/users/${id}`, {
       method: 'DELETE'
     })
+  },
+
+  // Operator Entity Endpoints
+  async getOperatorMetrics() {
+    return apiRequest('/api/operator/metrics')
+  },
+
+  async getOperatorRecords() {
+    return apiRequest('/api/operator/records')
+  },
+
+  async createArtisanRecord(artisanData) {
+    return apiRequest('/api/operator/records', {
+      method: 'POST',
+      body: JSON.stringify(artisanData)
+    })
+  },
+
+  async updateArtisanRecord(id, updateData) {
+    return apiRequest(`/api/operator/records/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(updateData)
+    })
+  },
+
+  async importBatchRecords(records) {
+    return apiRequest('/api/operator/records/batch', {
+      method: 'POST',
+      body: JSON.stringify({ records })
+    })
   }
 }

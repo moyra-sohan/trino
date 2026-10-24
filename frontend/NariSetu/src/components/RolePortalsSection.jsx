@@ -127,10 +127,10 @@ export default function RolePortalsSection({ onOpenAuth }) {
                 {/* Actions */}
                 <div className="pt-4 border-t border-neutral-100">
                   <button
-                    onClick={() => onOpenAuth('login', r.roleKey)}
+                    onClick={() => onOpenAuth(r.roleKey)}
                     className={`w-full py-3.5 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm hover:shadow-md ${r.buttonBg}`}
                   >
-                    <span>Log In to {r.title.split(' ')[0]} Portal</span>
+                    <span>Log In to {r.title}</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
