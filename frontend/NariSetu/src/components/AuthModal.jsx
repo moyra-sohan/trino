@@ -69,26 +69,31 @@ export default function AuthModal({
     try {
       const timestamp = Date.now().toString().slice(-4);
       let roleUser = {
-        id: `${activeRole}-${timestamp}`,
+        id: activeRole === 'operator' ? 'OP-8492' : `${activeRole}-${timestamp}`,
         name: activeRole === 'user' 
           ? 'Aparna Ghosh' 
           : activeRole === 'operator' 
-          ? 'Rekha Mondal (Hanskhali Operator)'
+          ? 'Smt. Rekha Mondal'
           : activeRole === 'partner'
           ? 'Rural Sphere Foundation'
           : 'Director of Rural Development',
         email: identifier || (activeRole === 'user' 
           ? 'aparna.ghosh@narisetu.org' 
+          : activeRole === 'operator'
+          ? 'rekha.mondal@narisetu.wb.gov.in'
           : activeRole === 'partner' 
           ? 'partnerships@ruralsphere.org.in' 
           : `${activeRole}_${timestamp}@narisetu.gov.in`),
         role: activeRole,
-        displayRole: activeRole,
-        status: activeRole === 'partner' ? 'Verified partner' : null,
-        initials: activeRole === 'partner' ? 'RS' : null,
+        displayRole: activeRole === 'operator' ? 'Field Operator (Data Entry)' : activeRole,
+        avatarInitials: activeRole === 'operator' ? 'RM' : null,
+        assignedBlock: activeRole === 'operator' ? 'Hanskhali' : null,
+        operatorSubRole: activeRole === 'operator' ? operatorSubRole : null,
+        status: activeRole === 'partner' ? 'Verified partner' : activeRole === 'operator' ? 'Active Field Operator' : null,
+        initials: activeRole === 'partner' ? 'RS' : activeRole === 'operator' ? 'RM' : null,
         tier: activeRole === 'partner' ? 'Tier-1 Partner' : null,
         avatar: activeRole === 'user' ? '/images/aparna_ghosh.jpg' : null,
-        location: activeRole === 'user' ? 'Hanskhali, Nadia' : activeRole === 'partner' ? 'West Bengal & Odisha' : null,
+        location: activeRole === 'user' ? 'Hanskhali, Nadia' : activeRole === 'operator' ? 'Hanskhali Block, Nadia South' : activeRole === 'partner' ? 'West Bengal & Odisha' : null,
         createdAt: new Date().toISOString()
       };
 

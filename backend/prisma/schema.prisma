@@ -17,3 +17,42 @@ model User {
 
   @@map("users")
 }
+
+model ArtisanBeneficiary {
+  id                 String   @id @default(uuid())
+  uid                String   @unique
+  firstName          String
+  lastName           String
+  bengaliName        String?
+  age                Int
+  educationLevel     String?
+  maritalStatus      String?
+  totalFamilyMembers Int?     @default(1)
+  numberOfChildren   Int?     @default(0)
+  monthlyIncome      Float?   @default(0)
+  state              String   @default("West Bengal")
+  district           String   @default("Nadia")
+  block              String   @default("Hanskhali")
+  gramPanchayat      String
+  village            String
+  wardLandmark       String?
+  pinCode            String   @default("741502")
+  primaryCraft       String
+  specialization     String?
+  experienceLevel    String?
+  productionCapacity String?
+  skillDescription   String?
+  achievements       String?
+  phone              String
+  aadhaarRef         String?
+  aadhaarStatus      String?  @default("Formatted OK")
+  photoUrl           String?
+  biometricMatch     Int?     @default(96)
+  syncStatus         String   @default("verified")
+  operatorId         String   @default("OP-8492")
+  operatorName       String   @default("Smt. Rekha Mondal")
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@map("artisan_beneficiaries")
+}
