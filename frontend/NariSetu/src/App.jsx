@@ -44,6 +44,7 @@ export default function App() {
   // Auto-restore view if logged in as partner/ngo or operator, else default to home
   const [currentView, setCurrentView] = useState(() => {
     const user = authService.getCurrentUser();
+    if (user?.role === 'admin') return 'admin';
     if (user?.role === 'partner' || user?.role === 'ngo') return 'ngo';
     if (user?.role === 'operator') return 'operator';
     return 'home';
@@ -376,7 +377,12 @@ export default function App() {
                       />
                     )}
                     {currentUser.role === 'admin' && (
-                      <AdminDashboard currentUser={currentUser} onNotify={notify} />
+                      <AdminPortal
+                        currentUser={currentUser}
+                        onNotify={notify}
+                        onLogout={handleLogout}
+                        onGoHome={() => setCurrentView('home')}
+                      />
                     )}
                     {currentUser.role === 'operator' && (
                       <OperatorPortal

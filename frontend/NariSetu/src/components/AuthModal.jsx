@@ -76,14 +76,14 @@ export default function AuthModal({
           ? 'Smt. Rekha Mondal'
           : activeRole === 'partner'
           ? 'Rural Sphere Foundation'
-          : 'Director of Rural Development',
+          : 'Administrator',
         email: identifier || (activeRole === 'user' 
           ? 'aparna.ghosh@narisetu.org' 
           : activeRole === 'operator'
           ? 'rekha.mondal@narisetu.wb.gov.in'
           : activeRole === 'partner' 
           ? 'partnerships@ruralsphere.org.in' 
-          : `${activeRole}_${timestamp}@narisetu.gov.in`),
+          : 'admin@narisetu.gov.in'),
         role: activeRole,
         displayRole: activeRole === 'operator' ? 'Field Operator (Data Entry)' : activeRole,
         avatarInitials: activeRole === 'operator' ? 'RM' : null,

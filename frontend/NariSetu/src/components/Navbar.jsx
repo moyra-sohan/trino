@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { 
   Globe, User, Users, LogOut, Menu, X, 
   Sparkles, Check, ChevronDown, MapPin, 
-  Home, ArrowLeftRight, LayoutDashboard, Building2
+  Home, ArrowLeftRight, LayoutDashboard, Building2,
+  Shield, ShieldCheck
 } from 'lucide-react';
 
 export default function Navbar({
@@ -282,14 +283,14 @@ export default function Navbar({
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => onNavigateSection('dashboard')}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-neutral-800 text-xs font-bold transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-neutral-800 text-xs font-bold transition-colors cursor-pointer"
                 >
                   <LayoutDashboard className="w-3.5 h-3.5" />
                   <span>Admin Dashboard</span>
                 </button>
                 <button
                   onClick={onLogout}
-                  className="p-2 rounded-xl text-neutral-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+                  className="p-2 rounded-xl text-neutral-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
                   title="Sign Out"
                 >
                   <LogOut className="w-4 h-4" />
@@ -412,6 +413,16 @@ export default function Navbar({
                   <span>Business & NGO</span>
                 </button>
 
+                {/* Direct Admin Console Button */}
+                <button
+                  onClick={() => onNavigateSection('admin')}
+                  className="hidden md:flex items-center gap-1.5 px-3 py-2 rounded-xl border border-emerald-300 bg-emerald-50/80 hover:bg-emerald-100/90 text-[#064e3b] text-xs font-bold transition-all cursor-pointer shadow-2xs"
+                  title="Administration Portal"
+                >
+                  <Shield className="w-3.5 h-3.5 text-emerald-700" />
+                  <span>Admin Console</span>
+                </button>
+
                 {/* Prominent Login Button */}
                 <button
                   onClick={() => onOpenAuth('citizen')}
@@ -511,6 +522,21 @@ export default function Navbar({
                   </button>
                 </div>
               )}
+
+              {isAdminUser && (
+                <div className="pt-1">
+                  <button
+                    onClick={() => {
+                      onNavigateSection('admin');
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full p-2.5 rounded-xl font-bold text-xs text-left flex items-center gap-2 bg-[#dcfce7] text-[#14532d]"
+                  >
+                    <Shield className="w-4 h-4 text-emerald-700" />
+                    <span>Admin Console (Overview, Verifications)</span>
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
             <div className="space-y-2">
@@ -549,6 +575,17 @@ export default function Navbar({
                   <span>Login / लॉगिन</span>
                 </button>
               </div>
+
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onNavigateSection('admin');
+                }}
+                className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-900 font-bold text-xs shadow-2xs cursor-pointer mt-1"
+              >
+                <Shield className="w-4 h-4 text-emerald-700" />
+                <span>Admin Console</span>
+              </button>
             </div>
           )}
         </div>
