@@ -21,13 +21,14 @@
 2. [Problem Statement & Background](#-problem-statement--background)
 3. [The 3 Core Pillars & Approach](#-the-3-core-pillars--approach)
 4. [End-to-End Working Flow (6-Step Lifecycle)](#-end-to-end-working-flow-6-step-lifecycle)
-5. [Team Roles & Contributions](#-team-roles--contributions)
+5. [System Roles & Responsibilities](#-system-roles--responsibilities)
 6. [Key Platform Features](#-key-platform-features)
 7. [Technology Stack](#-technology-stack)
 8. [Project Structure & Requirement Files](#-project-structure--requirement-files)
 9. [Setup, Initialization & How to Run](#-setup-initialization--how-to-run)
-11. [API Endpoints Reference](#-api-endpoints-reference)
-12. [Impact on Rural Development](#-impact-on-rural-development)
+10. [API Endpoints Reference](#-api-endpoints-reference)
+11. [Impact on Rural Development](#-impact-on-rural-development)
+12. [Detailed User Flow Architecture (USER_README.md)](./USER_README.md)
 13. [License](#-license)
 
 ---
@@ -414,6 +415,14 @@ Implementing NariSetu drives measurable progress across five critical socioecono
    - Ethical businesses and craft buyers gain direct visibility into authentic rural talent pools without navigating opaque layers of intermediaries.
 5. **Gender & Digital Equity**:
    - Assisted physical-digital access points (CSCs) bring women on the wrong side of the digital divide into the mainstream digital economy with dignity and institutional protection.
+
+---
+
+## 🗺️ Detailed User Flow Architecture
+
+For deep-dive architectural diagrams, interactive navigation state transitions, sequence diagrams, and persona walkthroughs across all roles (Artisan, Operator, NGO, Admin), consult the dedicated guide:
+
+👉 **[Read the Full User Architecture Guide (USER_README.md)](./USER_README.md)**
 
 ---
 
