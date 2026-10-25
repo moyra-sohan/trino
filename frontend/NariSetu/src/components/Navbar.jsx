@@ -282,12 +282,28 @@ export default function Navbar({
             {isAdminUser && (
               <div className="flex items-center gap-3">
                 <button
-                  onClick={() => onNavigateSection('dashboard')}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-neutral-800 text-xs font-bold transition-colors cursor-pointer"
+                  onClick={() => onNavigateSection('admin')}
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-purple-100 hover:bg-purple-200 text-purple-800 text-xs font-bold transition-colors cursor-pointer shadow-2xs"
                 >
-                  <LayoutDashboard className="w-3.5 h-3.5" />
-                  <span>Admin Dashboard</span>
+                  <ShieldCheck className="w-3.5 h-3.5 text-purple-700" />
+                  <span>Admin Console</span>
                 </button>
+
+                <div className="flex items-center gap-2 pl-2 border-l border-neutral-200">
+                  <div className="w-8 h-8 rounded-full bg-purple-700 text-white flex items-center justify-center text-xs font-black shadow-2xs">
+                    AD
+                  </div>
+                  <div className="hidden sm:flex flex-col text-left">
+                    <span className="text-xs font-bold text-neutral-900 leading-tight">
+                      {currentUser.name || 'Platform Administrator'}
+                    </span>
+                    <span className="text-[10px] text-purple-700 font-semibold flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-purple-600" />
+                      <span>Security & Governance</span>
+                    </span>
+                  </div>
+                </div>
+
                 <button
                   onClick={onLogout}
                   className="p-2 rounded-xl text-neutral-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"

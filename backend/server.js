@@ -4,6 +4,7 @@ import cors from '@fastify/cors'
 import { prisma } from './db.js'
 import { userRoutes } from './routes/user.routes.js'
 import { operatorRoutes } from './routes/operator.routes.js'
+import { adminRoutes } from './routes/admin.routes.js'
 
 const fastify = Fastify({ logger: true })
 
@@ -18,6 +19,9 @@ await fastify.register(userRoutes, { prefix: '/api/users' })
 // Register field operator entity router
 await fastify.register(operatorRoutes, { prefix: '/api/operator' })
 
+// Register admin governance & moderation entity router
+await fastify.register(adminRoutes, { prefix: '/api/admin' })
+
 fastify.get('/', async () => ({
   status: 'ok',
   message: 'Backend API is running',
@@ -26,7 +30,8 @@ fastify.get('/', async () => ({
     health: '/health',
     healthReady: '/health/ready',
     users: '/api/users',
-    operator: '/api/operator'
+    operator: '/api/operator',
+    admin: '/api/admin'
   }
 }))
 

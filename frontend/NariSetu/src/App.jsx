@@ -19,6 +19,7 @@ import OperatorDashboard from './components/OperatorDashboard';
 import UserDashboard from './components/UserDashboard';
 import { NgoPortal } from './ngoEntity';
 import { OperatorPortal } from './operatorEntity';
+import { AdminPortal } from './adminEntity';
 
 // Hooks & Services
 import { useLanguage } from './hooks/useLanguage';
@@ -106,6 +107,8 @@ export default function App() {
       setCurrentView('ngo');
     } else if (user.role === 'operator') {
       setCurrentView('operator');
+    } else if (user.role === 'admin') {
+      setCurrentView('admin');
     } else {
       setCurrentView('dashboard');
     }
@@ -124,6 +127,16 @@ export default function App() {
 
   // Smooth navigation
   const handleNavigateSection = (sectionId) => {
+    if (sectionId === 'admin') {
+      if (!currentUser || currentUser.role !== 'admin') {
+        handleOpenAuth('admin');
+      } else {
+        setCurrentView('admin');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      return;
+    }
+
     if (sectionId === 'operator') {
       if (!currentUser || currentUser.role !== 'operator') {
         handleOpenAuth('operator');
@@ -181,6 +194,9 @@ export default function App() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else if (currentUser.role === 'operator') {
         setCurrentView('operator');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (currentUser.role === 'admin') {
+        setCurrentView('admin');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         setCurrentView('dashboard');
@@ -249,9 +265,19 @@ export default function App() {
       </div>
 
       {/* ========================================================= */}
-      {/* 5. DATA ENTRY OPERATOR ENTITY PORTAL (MATCHING SCREENSHOTS 1-5) */}
+      {/* 5. DEDICATED ENTITY PORTALS (ADMIN / OPERATOR / NGO) */}
       {/* ========================================================= */}
-      {currentView === 'operator' ? (
+      {currentView === 'admin' ? (
+        <AdminPortal
+          currentUser={currentUser}
+          onNotify={notify}
+          onLogout={handleLogout}
+          onGoHome={() => {
+            setCurrentView('home');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+        />
+      ) : currentView === 'operator' ? (
         <OperatorPortal
           currentUser={currentUser}
           onNotify={notify}

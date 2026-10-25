@@ -112,5 +112,77 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ records })
     })
+  },
+
+  // Admin Entity Endpoints
+  async getAdminMetrics() {
+    return apiRequest('/api/admin/metrics')
+  },
+
+  async getAdminVerificationQueue(params = {}) {
+    const query = new URLSearchParams(params).toString()
+    return apiRequest(`/api/admin/verification-queue${query ? `?${query}` : ''}`)
+  },
+
+  async updateVerificationItem(id, updateData) {
+    return apiRequest(`/api/admin/verification-queue/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(updateData)
+    })
+  },
+
+  async getAdminOrganizations() {
+    return apiRequest('/api/admin/organizations')
+  },
+
+  async createAdminOrganization(orgData) {
+    return apiRequest('/api/admin/organizations', {
+      method: 'POST',
+      body: JSON.stringify(orgData)
+    })
+  },
+
+  async getAdminCommunities() {
+    return apiRequest('/api/admin/communities')
+  },
+
+  async createAdminCommunity(commData) {
+    return apiRequest('/api/admin/communities', {
+      method: 'POST',
+      body: JSON.stringify(commData)
+    })
+  },
+
+  async getAdminOpportunities() {
+    return apiRequest('/api/admin/opportunities')
+  },
+
+  async createAdminOpportunity(oppData) {
+    return apiRequest('/api/admin/opportunities', {
+      method: 'POST',
+      body: JSON.stringify(oppData)
+    })
+  },
+
+  async getAdminFlags() {
+    return apiRequest('/api/admin/flags')
+  },
+
+  async updateAdminFlag(id, flagData) {
+    return apiRequest(`/api/admin/flags/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(flagData)
+    })
+  },
+
+  async getAdminAuditLogs() {
+    return apiRequest('/api/admin/audit-logs')
+  },
+
+  async createAdminAuditLog(logData) {
+    return apiRequest('/api/admin/audit-logs', {
+      method: 'POST',
+      body: JSON.stringify(logData)
+    })
   }
 }

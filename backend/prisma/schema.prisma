@@ -56,3 +56,77 @@ model ArtisanBeneficiary {
 
   @@map("artisan_beneficiaries")
 }
+
+model AdminAuditLog {
+  id        String   @id @default(uuid())
+  action    String
+  detail    String?
+  reviewer  String?  @default("Administrator")
+  category  String   @default("Security")
+  dotColor  String?  @default("bg-emerald-500")
+  createdAt DateTime @default(now())
+
+  @@map("admin_audit_logs")
+}
+
+model VerificationItem {
+  id                 String   @id @default(uuid())
+  regNumber          String   @unique
+  name               String
+  location           String
+  district           String?
+  city               String?
+  type               String
+  typeColor          String?  @default("bg-emerald-50 text-emerald-700 border-emerald-200")
+  submittedDate      String?
+  submittedFreshness String?
+  docsStatus         String?  @default("Pending")
+  docsRatio          String?  @default("0/0")
+  assignedReviewer   String?  @default("A. Sen")
+  assignedAvatar     String?  @default("AS")
+  assignedColor      String?  @default("bg-teal-700 text-white")
+  status             String   @default("Awaiting Review")
+  statusColor        String?  @default("bg-amber-50 text-amber-800 border-amber-200")
+  repName            String?
+  repPhone           String?
+  affiliatedWomen    String?
+  auditorNotes       String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@map("verification_items")
+}
+
+model AdminOrganization {
+  id             String   @id @default(uuid())
+  regId          String   @unique
+  name           String
+  type           String
+  location       String
+  district       String?  @default("Nadia")
+  status         String   @default("Active")
+  contactPerson  String?
+  contactEmail   String?
+  contactPhone   String?
+  womenImpacted  Int?     @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("admin_organizations")
+}
+
+model AdminOpportunity {
+  id             String   @id @default(uuid())
+  title          String
+  issuer         String
+  type           String
+  budget         String
+  deadline       String
+  region         String
+  status         String   @default("Published")
+  womenEnrolled  Int?     @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("admin_opportunities")
+}
