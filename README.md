@@ -288,28 +288,6 @@ npm install
 cd ../..
 ```
 
----
-
-### Step 3: Configure Environment Variables
-
-1. Check or create the `.env` file in the `backend/` directory:
-   ```bash
-   # Location: trino/backend/.env
-   DATABASE_URL="postgresql://neondb_owner:npg_oHs7LEv2jZcp@ep-dawn-heart-a5liig8g-pooler.us-east-2.aws.neon.tech/hsc_db?sslmode=verify-full&channel_binding=require"
-   PORT=3000
-   HOST=0.0.0.0
-   ```
-2. *(Optional)* If using a local PostgreSQL database, replace `DATABASE_URL` with your local connection string:
-   ```env
-   DATABASE_URL="postgresql://postgres:password@localhost:5432/narisetu_db"
-   ```
-
----
-
-### Step 4: Initialize the Database (Prisma)
-
-Generate the Prisma Client and synchronize the schema with your database:
-
 ```bash
 # Generate Prisma Client
 npm --prefix backend run db:generate
