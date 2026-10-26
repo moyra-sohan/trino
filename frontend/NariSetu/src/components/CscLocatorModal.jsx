@@ -10,21 +10,21 @@ export default function CscLocatorModal({ isOpen, onClose, lang, onShowToast }) 
   const sampleCenters = [
     {
       id: 1,
-      name: "Gram Panchayat Sahayata Kendra - Rampur",
+      name: "Village Community Sahayata Kendra - Rampur",
       sahayika: "Smt. Pooja Devi (Lead Mitra)",
       phone: "+91 98765 43210",
       distance: "0.8 km from village square",
-      address: "Panchayat Bhavan, Near Primary Health Center, Rampur",
+      address: "Community Bhavan, Near Primary Health Center, Rampur",
       openHours: "Mon-Sat: 9:00 AM - 5:30 PM",
-      services: ["Biometric Aadhaar", "Direct Scheme Apply", "Passbook Linking"]
+      services: ["Biometric Verification", "Direct Scheme Apply", "Passbook Linking"]
     },
     {
       id: 2,
-      name: "CSC Digital Seva Kendra - Block North",
-      sahayika: "Smt. Sunita Murmu (VLE)",
+      name: "NariSetu Digital Seva Kendra - Block North",
+      sahayika: "Smt. Sunita Murmu (Lead Coordinator)",
       phone: "+91 98765 88990",
       distance: "2.4 km",
-      address: "BDO Complex, Room 14, Main Road",
+      address: "Empowerment Complex, Room 14, Main Road",
       openHours: "Mon-Sat: 9:30 AM - 6:00 PM",
       services: ["Micro-ATM Cash Withdrawal", "Loom Subsidy Form", "Certificate Print"]
     }
@@ -63,7 +63,7 @@ export default function CscLocatorModal({ isOpen, onClose, lang, onShowToast }) 
           </div>
           <div>
             <h3 className="text-xl font-extrabold text-neutral-900">
-              {lang === 'hi' ? 'निकटतम सीएससी / ग्राम पंचायत केंद्र' : lang === 'bn' ? 'নিকটতম সিএসসি ও পঞ্চায়েত কেন্দ্র' : 'Find Nearest Village Kendra & Sahayika'}
+              {lang === 'hi' ? 'निकटतम ग्रामीण सहायता केंद्र' : lang === 'bn' ? 'নিকটতম গ্রাম সহায়তা কেন্দ্র' : 'Find Nearest Village Kendra & Sahayika'}
             </h3>
             <p className="text-xs text-neutral-500 font-medium">
               Doorstep verification and paperless assistance

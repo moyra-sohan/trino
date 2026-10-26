@@ -19,7 +19,7 @@ export const defaultWomanProfile = {
   isVerified: true,
   communitiesCount: 2,
   communitiesNames: "Hanskhali SHG & Nadia Crafts",
-  verifiedBy: "WB State Rural Livelihood Mission (Anandadhara)",
+  verifiedBy: "NariSetu Rural Artisan Guild & Livelihood Council",
   
   verifiedSkills: [
     "Tailoring",
@@ -83,7 +83,7 @@ export const defaultCommunities = [
         time: "4:30 PM",
         type: "notice",
         noticeTitle: "Training Workshop Notice",
-        content: "Government skill-upgrade workshop on 5 November at the block office. All members are encouraged to attend. Conveyance allowance provided."
+        content: "Skill-upgrade workshop on 5 November at the community block center. All members are encouraged to attend. Conveyance allowance provided."
       },
       {
         id: "msg-2",

@@ -1,6 +1,6 @@
 import React from 'react';
 import { 
-  User, Users, Landmark, GraduationCap, Briefcase, 
+  Users, Landmark, GraduationCap, Briefcase, 
   TrendingUp, ShieldCheck, ArrowRight, Sparkles 
 } from 'lucide-react';
 
@@ -14,7 +14,6 @@ export default function HomeSection({
   const hero = content?.hero || {};
   const features = content?.features || [];
   const stats = content?.stats || [];
-  const cards = hero?.cards || [];
 
   const getFeatureIcon = (iconName) => {
     switch (iconName) {
@@ -34,34 +33,13 @@ export default function HomeSection({
     }
   };
 
-  const roleCardStyles = {
-    pink: {
-      cardBg: 'bg-white/95 hover:bg-white border-rose-200 hover:border-rose-400 shadow-rose-900/5',
-      badgeBg: 'bg-rose-100 text-rose-800 border-rose-200',
-      iconBox: 'bg-rose-50 text-rose-700',
-      btn: 'bg-rose-600 hover:bg-rose-700 text-white shadow-rose-600/20'
-    },
-    blue: {
-      cardBg: 'bg-white/95 hover:bg-white border-blue-200 hover:border-blue-400 shadow-blue-900/5',
-      badgeBg: 'bg-blue-100 text-blue-800 border-blue-200',
-      iconBox: 'bg-blue-50 text-blue-700',
-      btn: 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-600/20'
-    },
-    green: {
-      cardBg: 'bg-white/95 hover:bg-white border-emerald-200 hover:border-emerald-400 shadow-emerald-900/5',
-      badgeBg: 'bg-emerald-100 text-emerald-800 border-emerald-200',
-      iconBox: 'bg-emerald-50 text-emerald-700',
-      btn: 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-600/20'
-    }
-  };
-
   return (
     <section id="home" className="relative">
       
       {/* ========================================================= */}
       {/* HERO SECTION WITH USER-GIVEN BACKGROUND IMAGE (hero_bg.jpg) */}
       {/* ========================================================= */}
-      <div className="relative min-h-[640px] lg:min-h-[720px] flex items-center justify-center overflow-hidden border-b border-amber-200/60">
+      <div className="relative min-h-[500px] lg:min-h-[580px] flex items-center justify-center overflow-hidden border-b border-amber-200/60">
         
         {/* Background Image Layer */}
         <div 
@@ -89,10 +67,10 @@ export default function HomeSection({
           {/* Main Hero Header */}
           <div className="max-w-3xl text-left">
             
-            {/* Government Mandate Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-100/95 border border-amber-300 text-amber-900 text-xs sm:text-sm font-bold shadow-xs mb-4">
-              <span className="text-sm">🏛️</span>
-              <span>{hero.govBadge || 'Ministry of Rural Development & Skill India Initiative'}</span>
+            {/* Empowerment Initiative Badge */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-100/95 border border-orange-300 text-orange-950 text-xs sm:text-sm font-bold shadow-xs mb-4">
+              <Sparkles className="w-4 h-4 text-orange-600" />
+              <span>{hero.govBadge || 'Rural Women Livelihoods & Skill Development Initiative'}</span>
             </div>
 
             {/* Platform Brand Title Badge */}
@@ -108,110 +86,25 @@ export default function HomeSection({
 
             {/* Descriptive Paragraph */}
             <p className="mt-4 text-base sm:text-lg text-neutral-700 leading-relaxed font-normal max-w-2xl">
-              {hero.description || 'A government-supported platform empowering rural women to master marketable skills, start self-reliant enterprises, and access financial schemes.'}
+              {hero.description || 'A dedicated empowerment platform supporting rural women to master marketable skills, start self-reliant enterprises, and access community financial schemes.'}
             </p>
-          </div>
 
-          {/* ========================================================= */}
-          {/* 3 ROLE ACTION CARDS (EXACT MATCH TO WIREFRAME 01. HOME) */}
-          {/* ========================================================= */}
-          <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-            
-            {/* Card 1: For Women / Citizens */}
-            {cards[0] && (
-              <div className={`rounded-3xl p-6 sm:p-7 border backdrop-blur-md shadow-xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between ${roleCardStyles.pink.cardBg}`}>
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${roleCardStyles.pink.iconBox}`}>
-                      <User className="w-6 h-6" />
-                    </div>
-                    <span className={`text-[11px] font-bold px-3 py-1 rounded-full border uppercase tracking-wider ${roleCardStyles.pink.badgeBg}`}>
-                      {cards[0].badge}
-                    </span>
-                  </div>
-                  <h2 className="text-xl font-bold text-neutral-900 mb-2">
-                    {cards[0].title}
-                  </h2>
-                  <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed mb-6">
-                    {cards[0].desc}
-                  </p>
-                </div>
-
-                <button
-                  onClick={() => {
-                    if (currentUser && currentUser.role === 'user') {
-                      onNavigate('profile');
-                    } else {
-                      onOpenAuth('citizen');
-                    }
-                  }}
-                  className={`w-full py-3 px-5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 transition-all shadow-md active:scale-95 cursor-pointer ${roleCardStyles.pink.btn}`}
-                >
-                  <span>{cards[0].action}</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-            )}
-
-            {/* Card 2: For Community Support */}
-            {cards[1] && (
-              <div className={`rounded-3xl p-6 sm:p-7 border backdrop-blur-md shadow-xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between ${roleCardStyles.blue.cardBg}`}>
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${roleCardStyles.blue.iconBox}`}>
-                      <Users className="w-6 h-6" />
-                    </div>
-                    <span className={`text-[11px] font-bold px-3 py-1 rounded-full border uppercase tracking-wider ${roleCardStyles.blue.badgeBg}`}>
-                      {cards[1].badge}
-                    </span>
-                  </div>
-                  <h2 className="text-xl font-bold text-neutral-900 mb-2">
-                    {cards[1].title}
-                  </h2>
-                  <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed mb-6">
-                    {cards[1].desc}
-                  </p>
-                </div>
-
-                <button
-                  onClick={() => onOpenAuth('partner')}
-                  className={`w-full py-3 px-5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 transition-all shadow-md active:scale-95 cursor-pointer ${roleCardStyles.blue.btn}`}
-                >
-                  <span>{cards[1].action}</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-            )}
-
-            {/* Card 3: For Government */}
-            {cards[2] && (
-              <div className={`rounded-3xl p-6 sm:p-7 border backdrop-blur-md shadow-xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between ${roleCardStyles.green.cardBg}`}>
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${roleCardStyles.green.iconBox}`}>
-                      <Landmark className="w-6 h-6" />
-                    </div>
-                    <span className={`text-[11px] font-bold px-3 py-1 rounded-full border uppercase tracking-wider ${roleCardStyles.green.badgeBg}`}>
-                      {cards[2].badge}
-                    </span>
-                  </div>
-                  <h2 className="text-xl font-bold text-neutral-900 mb-2">
-                    {cards[2].title}
-                  </h2>
-                  <p className="text-xs sm:text-sm text-neutral-600 leading-relaxed mb-6">
-                    {cards[2].desc}
-                  </p>
-                </div>
-
-                <button
-                  onClick={() => onOpenAuth('gov')}
-                  className={`w-full py-3 px-5 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 transition-all shadow-md active:scale-95 cursor-pointer ${roleCardStyles.green.btn}`}
-                >
-                  <span>{cards[2].action}</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-            )}
+            {/* Hero CTA Action Buttons */}
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <button
+                onClick={() => onNavigate('schemes')}
+                className="px-6 py-3.5 rounded-2xl bg-[#ea580c] hover:bg-[#c2410c] text-white font-bold text-sm sm:text-base shadow-lg shadow-orange-600/25 transition-all flex items-center gap-2 active:scale-95 cursor-pointer"
+              >
+                <span>{content?.nav?.schemes || 'Find Welfare Schemes'}</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => onNavigate('about')}
+                className="px-6 py-3.5 rounded-2xl bg-white/95 hover:bg-white text-neutral-800 font-bold text-sm sm:text-base border border-amber-300 shadow-sm transition-all flex items-center gap-2 active:scale-95 cursor-pointer"
+              >
+                <span>{content?.nav?.about || 'Explore Portals'}</span>
+              </button>
+            </div>
 
           </div>
 

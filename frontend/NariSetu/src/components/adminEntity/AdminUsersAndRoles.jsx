@@ -29,7 +29,7 @@ export default function AdminUsersAndRoles({
 
   // Fallback initial users if backend is currently launching
   const defaultMockUsers = [
-    { id: '1', name: 'Director of Rural Development', email: 'admin@narisetu.gov.in', role: 'admin', created_at: '2024-01-15' },
+    { id: '1', name: 'Platform Director', email: 'admin@narisetu.org', role: 'admin', created_at: '2024-01-15' },
     { id: '2', name: 'Rekha Mondal', email: 'rekha.operator@narisetu.org', role: 'operator', created_at: '2024-02-10' },
     { id: '3', name: 'Rural Sphere Foundation', email: 'partnerships@ruralsphere.org.in', role: 'partner', created_at: '2024-02-18' },
     { id: '4', name: 'Aparna Ghosh', email: 'aparna.ghosh@narisetu.org', role: 'user', created_at: '2024-03-01' }

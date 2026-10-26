@@ -714,7 +714,7 @@ export default function NewRegistrationForm({
               </p>
             </div>
             <span className="text-[10px] font-bold text-orange-800 bg-orange-50 px-2.5 py-1 rounded-md border border-orange-200">
-              Ministry of Textiles Taxonomy
+              Standard Artisan Craft Taxonomy
             </span>
           </div>
 

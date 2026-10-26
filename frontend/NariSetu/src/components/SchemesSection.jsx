@@ -43,7 +43,7 @@ export default function SchemesSection({
           </div>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight">
-            {schemesData.heading || 'Find Government Schemes & Financial Support'}
+            {schemesData.heading || 'Find Welfare Schemes & Financial Support'}
           </h2>
 
           <p className="text-emerald-100/80 text-sm sm:text-base font-normal max-w-xl mx-auto">

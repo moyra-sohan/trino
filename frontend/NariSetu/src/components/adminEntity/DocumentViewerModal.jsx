@@ -40,11 +40,11 @@ export default function DocumentViewerModal({
               <ShieldCheck className="w-8 h-8" />
             </div>
             <span className="text-[10px] font-bold tracking-wider uppercase text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 mb-2">
-              State Government Authenticated Copy
+              Official Authenticated Copy
             </span>
             <h4 className="text-base font-bold text-neutral-900">{document.title}</h4>
             <p className="text-xs text-neutral-500 mt-1 max-w-xs">
-              Cryptographically verified with West Bengal Registrar of Societies & Department of Self-Help Groups.
+              Cryptographically verified with NariSetu Central Entity Registry & Self-Help Group Council.
             </p>
 
             <div className="w-full mt-6 p-4 rounded-xl bg-neutral-50 border border-neutral-100 text-left text-xs space-y-2 font-mono">

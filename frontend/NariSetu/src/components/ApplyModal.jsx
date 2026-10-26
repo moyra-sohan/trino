@@ -71,7 +71,7 @@ export default function ApplyModal({
               </div>
               <div>
                 <h3 className="text-xl font-extrabold text-neutral-900">
-                  {lang === 'hi' ? 'योजना हेतु ऑनलाइन आवेदन' : lang === 'bn' ? 'স্কিমে অনলাইন আবেদন' : 'Apply for Government Scheme'}
+                  {lang === 'hi' ? 'योजना हेतु ऑनलाइन आवेदन' : lang === 'bn' ? 'স্কিমে অনলাইন আবেদন' : 'Apply for Welfare Scheme'}
                 </h3>
                 <p className="text-xs text-neutral-500 font-medium">
                   {scheme?.title || 'NariSetu Direct Livelihood Scheme'}

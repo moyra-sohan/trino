@@ -4,7 +4,7 @@ import {
   Check, CheckCircle2, Clock, ArrowRight, X, Sparkles, 
   Scissors, Layers, Utensils, ShoppingBag, Sprout, 
   MessageSquare, AlertCircle, RefreshCw, Volume2, ShieldCheck,
-  Megaphone, PlusCircle, CheckCheck
+  Megaphone, PlusCircle, CheckCheck, ChevronLeft
 } from 'lucide-react';
 import { 
   defaultCommunities, 
@@ -30,6 +30,7 @@ export default function CommunityChat({
   const [searchQuery, setSearchQuery] = useState('');
   const [inputText, setInputText] = useState('');
   const [isEmptyStateSimulated, setIsEmptyStateSimulated] = useState(simulateEmptyStateInitial);
+  const [mobileTab, setMobileTab] = useState('chat'); // 'channels' | 'chat'
 
   // Voice recording state
   const [isRecording, setIsRecording] = useState(false);
@@ -203,12 +204,41 @@ export default function CommunityChat({
       
       {/* Main Container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12">
+        
+        {/* Mobile Tab Switcher */}
+        <div className="lg:hidden flex rounded-2xl bg-white border border-neutral-200/90 p-1 mb-4 shadow-2xs">
+          <button
+            onClick={() => setMobileTab('channels')}
+            className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+              mobileTab === 'channels'
+                ? 'bg-[#ea580c] text-white shadow-xs'
+                : 'text-neutral-600 hover:text-neutral-900'
+            }`}
+          >
+            <Users className="w-3.5 h-3.5" />
+            <span>Clusters ({communities.length})</span>
+          </button>
+          <button
+            onClick={() => setMobileTab('chat')}
+            className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 truncate px-2 ${
+              mobileTab === 'chat'
+                ? 'bg-[#ea580c] text-white shadow-xs'
+                : 'text-neutral-600 hover:text-neutral-900'
+            }`}
+          >
+            <MessageSquare className="w-3.5 h-3.5" />
+            <span className="truncate">{activeCommunity.name}</span>
+          </button>
+        </div>
+
         <div className="bg-white rounded-3xl shadow-sm border border-neutral-200/90 overflow-hidden flex flex-col lg:flex-row min-h-[780px]">
           
           {/* ========================================================= */}
           {/* LEFT SIDEBAR: COMMUNITIES DIRECTORY */}
           {/* ========================================================= */}
-          <div className="w-full lg:w-80 xl:w-96 shrink-0 border-r border-neutral-200/80 bg-white p-4 sm:p-5 flex flex-col justify-between">
+          <div className={`w-full lg:w-80 xl:w-96 shrink-0 border-r border-neutral-200/80 bg-white p-4 sm:p-5 flex-col justify-between ${
+            mobileTab === 'channels' ? 'flex' : 'hidden lg:flex'
+          }`}>
             
             <div className="space-y-5">
               
@@ -250,6 +280,7 @@ export default function CommunityChat({
                         onClick={() => {
                           setActiveCommunityId(community.id);
                           setIsEmptyStateSimulated(false);
+                          setMobileTab('chat');
                         }}
                         className={`p-3 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
                           isActive
@@ -377,13 +408,22 @@ export default function CommunityChat({
           {/* ========================================================= */}
           {/* RIGHT MAIN CHAT PANE */}
           {/* ========================================================= */}
-          <div className="flex-1 flex flex-col bg-[#fdfcfb] min-h-[700px]">
+          <div className={`flex-1 flex-col bg-[#fdfcfb] min-h-[700px] ${
+            mobileTab === 'chat' ? 'flex' : 'hidden lg:flex'
+          }`}>
             
             {/* 1. CHAT CHANNEL HEADER */}
             <div className="p-4 sm:px-6 py-3.5 border-b border-neutral-200/80 bg-white flex items-center justify-between gap-4">
               
               {/* Channel identity */}
               <div className="flex items-center gap-3 min-w-0">
+                <button
+                  onClick={() => setMobileTab('channels')}
+                  className="lg:hidden p-2 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-neutral-700 shrink-0"
+                  title="Back to Clusters"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#ea580c] to-[#f97316] text-white flex items-center justify-center shrink-0 shadow-xs">
                   {activeCommunity.icon === 'scissors' ? (
                     <Scissors className="w-5 h-5" />
@@ -460,7 +500,7 @@ export default function CommunityChat({
                       Welcome to {activeCommunity.name}
                     </h3>
                     <p className="text-xs text-neutral-500 mt-1 leading-relaxed">
-                      There are no recent messages in this cluster yet. Introduce yourself, ask questions about raw material distribution, or await government training alerts.
+                      There are no recent messages in this cluster yet. Introduce yourself, ask questions about raw material distribution, or await community training alerts.
                     </p>
                   </div>
 

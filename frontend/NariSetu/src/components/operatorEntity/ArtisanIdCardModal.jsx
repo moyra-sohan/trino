@@ -36,21 +36,23 @@ export default function ArtisanIdCardModal({
         <div className="p-6">
           <div className="border-2 border-orange-500/40 rounded-2xl p-6 bg-gradient-to-br from-amber-50/50 via-white to-orange-50/30 relative overflow-hidden shadow-md">
             
-            {/* Hologram / Govt Watermark Ribbon */}
+            {/* Hologram / Security Watermark Ribbon */}
             <div className="absolute top-0 right-0 w-36 h-36 bg-gradient-to-bl from-orange-400/10 to-transparent rounded-bl-full pointer-events-none" />
             
-            {/* Top govt banner */}
+            {/* Top card banner */}
             <div className="flex items-center justify-between pb-4 border-b border-orange-200">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#ea580c] text-white flex items-center justify-center font-black shadow-sm">
-                  NS
-                </div>
+                <img 
+                  src="/images/na_icon.png" 
+                  alt="NariSetu Logo" 
+                  className="w-10 h-10 rounded-xl object-cover shadow-sm shrink-0" 
+                />
                 <div>
                   <div className="text-xs font-black tracking-tight text-neutral-900 uppercase">
-                    Government of West Bengal • NariSetu
+                    NariSetu Artisan Federation
                   </div>
                   <div className="text-[10px] text-neutral-600 font-semibold">
-                    Directorate of Handicrafts & Rural Livelihoods
+                    Rural Livelihoods & Craftswomen Network
                   </div>
                 </div>
               </div>
@@ -138,7 +140,7 @@ export default function ArtisanIdCardModal({
               <span className="font-mono">Registered: {record.registered || '24 Oct 2024'}</span>
               <span className="font-semibold text-emerald-700 flex items-center gap-1">
                 <ShieldCheck className="w-3.5 h-3.5" />
-                <span>Nadia District Handicrafts Board Certified</span>
+                <span>NariSetu Verified Craftswoman Guild</span>
               </span>
             </div>
 
@@ -148,7 +150,7 @@ export default function ArtisanIdCardModal({
         {/* Footer Actions */}
         <div className="px-6 py-4 bg-neutral-50 border-t border-neutral-200 flex items-center justify-between">
           <span className="text-xs text-neutral-500">
-            Biometric hash verified against UIDAI & Hanskhali Block Database.
+            Identity hash verified against NariSetu Member Directory.
           </span>
           <div className="flex gap-3">
             <button

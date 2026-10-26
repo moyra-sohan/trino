@@ -27,15 +27,15 @@ export default function HelpSection({
   };
 
   const sahayika = help.sahayikaCard || {
-    title: "Gram Panchayat Helpdesk",
+    title: "Community Helpdesk",
     name: "Smt. Pooja Devi",
-    role: "Lead Gram Mitra / CSC Operator",
-    badge: "Active at Block Center",
+    role: "Lead Community Mitra / Coordinator",
+    badge: "Active at Community Center",
     phoneLabel: "Toll-Free Helpline",
     phoneNum: "1800-200-6274",
     waLabel: "WhatsApp Sahayata",
     waNum: "+91 98765 43210",
-    locateLabel: "Find Nearest Kendra",
+    locateLabel: "Find Nearest Support Kendra",
     note: "Doorstep guidance available across all 700+ districts"
   };
 

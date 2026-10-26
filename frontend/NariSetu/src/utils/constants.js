@@ -1,12 +1,12 @@
 export const APP_CONFIG = {
   name: 'NariSetu',
   portalTagline: 'Skilled Women | Stronger Communities | Brighter Future',
-  govBadge: 'Ministry of Rural Development & Skill India Initiative',
+  govBadge: 'Rural Women Livelihoods & Skill Development Initiative',
   helpline: {
     tollFree: '1800-200-6274',
     tollFreeDisplay: '1800-200-NARI',
     whatsapp: '+91 98765 43210',
-    email: 'support@narisetu.gov.in'
+    email: 'support@narisetu.org'
   },
   roles: {
     USER: 'user',

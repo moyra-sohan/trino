@@ -108,11 +108,11 @@ export default function NgoLayout({
               className="flex items-center gap-3 cursor-pointer group pb-6 border-b border-neutral-100"
               title="Return to NariSetu Home"
             >
-              <div className="w-9 h-9 rounded-xl bg-[#ea580c] flex items-center justify-center text-white shadow-md shadow-orange-500/20 group-hover:scale-105 transition-transform">
-                <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                </svg>
-              </div>
+              <img 
+                src="/images/na_icon.png" 
+                alt="NariSetu Logo" 
+                className="w-10 h-10 rounded-2xl object-cover shadow-md shadow-orange-500/20 group-hover:scale-105 transition-transform shrink-0" 
+              />
               <div className="flex flex-col">
                 <div className="flex items-center gap-1.5">
                   <span className="text-lg font-black tracking-tight text-neutral-900">
@@ -177,11 +177,11 @@ export default function NgoLayout({
               <div>
                 <div className="flex items-center justify-between pb-4 border-b border-neutral-100">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-xl bg-[#ea580c] flex items-center justify-center text-white">
-                      <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                      </svg>
-                    </div>
+                    <img 
+                      src="/images/na_icon.png" 
+                      alt="NariSetu Logo" 
+                      className="w-8 h-8 rounded-xl object-cover shadow-xs shrink-0" 
+                    />
                     <div>
                       <span className="text-base font-black text-neutral-900">NariSetu</span>
                       <span className="text-[10px] block text-orange-600 font-bold">নারীসেতু</span>

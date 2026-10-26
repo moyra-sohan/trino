@@ -58,23 +58,18 @@ export default function Navbar({
             className="flex items-center gap-3 cursor-pointer group select-none shrink-0"
             title="NariSetu Home"
           >
-            {/* Stylized Logo Icon */}
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#ea580c] to-[#f97316] flex items-center justify-center text-white shadow-md shadow-orange-500/20 group-hover:scale-105 transition-transform duration-300 shrink-0">
-              <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-              </svg>
-            </div>
+            {/* NariSetu Brand Logo */}
+            <img 
+              src="/images/na_icon.png" 
+              alt="NariSetu Logo" 
+              className="w-10 h-10 rounded-2xl object-cover shadow-md shadow-orange-500/20 group-hover:scale-105 transition-transform duration-300 shrink-0" 
+            />
 
-            <div className="flex flex-col">
-              <div className="flex items-center gap-2">
-                <span className="text-xl sm:text-2xl font-black tracking-tight text-neutral-900">
-                  Nari<span className="text-[#ea580c]">Setu</span>
-                </span>
-                <span className="text-[10px] font-bold text-[#047857] bg-[#ecfdf5] px-2 py-0.5 rounded-full border border-emerald-300">
-                  Govt. Initiative
-                </span>
-              </div>
-              <span className="text-[11px] font-medium text-neutral-500 hidden sm:block truncate max-w-xs">
+            <div className="flex flex-col text-left">
+              <span className="text-xl sm:text-2xl font-black tracking-tight text-neutral-900 leading-tight">
+                Nari<span className="text-[#ea580c]">Setu</span>
+              </span>
+              <span className="text-[11px] font-semibold text-neutral-500 hidden sm:block truncate max-w-xs">
                 Empowerment Portal for Rural Artisans
               </span>
             </div>
@@ -468,19 +463,41 @@ export default function Navbar({
       {/* MOBILE MENU */}
       {/* ========================================================= */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-neutral-200/80 bg-white px-4 pt-3 pb-5 space-y-3">
+        <div className="lg:hidden border-t border-neutral-200/80 bg-white px-4 pt-3 pb-6 space-y-4 shadow-xl animate-in slide-in-from-top-2 duration-200">
+          
+          {/* Mobile Language & Accessibility Bar */}
+          <div className="flex items-center justify-between pb-3 border-b border-neutral-100 gap-2">
+            <div className="flex items-center gap-1.5 text-xs text-neutral-600 font-bold">
+              <Globe className="w-3.5 h-3.5 text-[#ea580c]" />
+              <span>Language:</span>
+            </div>
+            <div className="flex items-center gap-1">
+              {availableLanguages?.map((l) => (
+                <button
+                  key={l.code}
+                  onClick={() => onChangeLanguage?.(l.code)}
+                  className={`px-2.5 py-1 text-xs rounded-lg font-bold transition-all cursor-pointer ${
+                    lang === l.code ? 'bg-[#ea580c] text-white shadow-xs' : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+                  }`}
+                >
+                  {l.native}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {currentUser ? (
-            <div className="space-y-2">
-              <div className="flex items-center justify-between p-2.5 rounded-xl bg-orange-50/60 border border-orange-200">
-                <div className="flex items-center gap-2.5">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between p-3 rounded-2xl bg-orange-50/70 border border-orange-200">
+                <div className="flex items-center gap-3 min-w-0">
                   <img
                     src={currentUser.avatar || '/images/aparna_ghosh.jpg'}
                     alt={currentUser.name}
-                    className="w-8 h-8 rounded-full object-cover"
+                    className="w-10 h-10 rounded-full object-cover shrink-0 border border-orange-300"
                   />
-                  <div>
-                    <div className="font-bold text-xs text-neutral-900">{currentUser.name}</div>
-                    <div className="text-[10px] text-neutral-500">{currentUser.role}</div>
+                  <div className="min-w-0">
+                    <div className="font-bold text-xs text-neutral-900 truncate">{currentUser.name}</div>
+                    <div className="text-[10px] text-neutral-500 capitalize">{currentUser.role}</div>
                   </div>
                 </div>
                 <button
@@ -488,7 +505,7 @@ export default function Navbar({
                     onLogout();
                     setMobileMenuOpen(false);
                   }}
-                  className="text-xs text-rose-600 font-bold px-2 py-1 rounded-lg hover:bg-rose-50"
+                  className="text-xs text-rose-600 font-bold px-3 py-1.5 rounded-xl hover:bg-rose-50 border border-rose-200/60 shrink-0"
                 >
                   Sign Out
                 </button>
@@ -501,8 +518,8 @@ export default function Navbar({
                       onNavigateSection('profile');
                       setMobileMenuOpen(false);
                     }}
-                    className={`p-2.5 rounded-xl font-bold text-xs text-left flex items-center gap-2 ${
-                      currentView === 'profile' ? 'bg-orange-50 text-[#ea580c]' : 'bg-neutral-50 text-neutral-800'
+                    className={`p-3 rounded-2xl font-bold text-xs text-left flex items-center gap-2 transition-colors ${
+                      currentView === 'profile' ? 'bg-[#ea580c] text-white shadow-sm' : 'bg-neutral-50 text-neutral-800 hover:bg-neutral-100'
                     }`}
                   >
                     <User className="w-4 h-4" />
@@ -514,8 +531,8 @@ export default function Navbar({
                       onNavigateSection('community');
                       setMobileMenuOpen(false);
                     }}
-                    className={`p-2.5 rounded-xl font-bold text-xs text-left flex items-center gap-2 ${
-                      currentView === 'community' ? 'bg-orange-50 text-[#ea580c]' : 'bg-neutral-50 text-neutral-800'
+                    className={`p-3 rounded-2xl font-bold text-xs text-left flex items-center gap-2 transition-colors ${
+                      currentView === 'community' ? 'bg-[#ea580c] text-white shadow-sm' : 'bg-neutral-50 text-neutral-800 hover:bg-neutral-100'
                     }`}
                   >
                     <Users className="w-4 h-4" />
@@ -531,7 +548,7 @@ export default function Navbar({
                       onNavigateSection('ngo');
                       setMobileMenuOpen(false);
                     }}
-                    className="w-full p-2.5 rounded-xl font-bold text-xs text-left flex items-center gap-2 bg-orange-100 text-[#ea580c]"
+                    className="w-full p-3 rounded-2xl font-bold text-xs text-left flex items-center gap-2.5 bg-orange-100/80 text-[#ea580c] border border-orange-200 hover:bg-orange-200/70 transition-colors"
                   >
                     <Building2 className="w-4 h-4" />
                     <span>Business & NGO Dashboard</span>
@@ -546,7 +563,7 @@ export default function Navbar({
                       onNavigateSection('admin');
                       setMobileMenuOpen(false);
                     }}
-                    className="w-full p-2.5 rounded-xl font-bold text-xs text-left flex items-center gap-2 bg-[#dcfce7] text-[#14532d]"
+                    className="w-full p-3 rounded-2xl font-bold text-xs text-left flex items-center gap-2.5 bg-[#dcfce7] text-[#14532d] border border-emerald-200 hover:bg-emerald-200/70 transition-colors"
                   >
                     <Shield className="w-4 h-4 text-emerald-700" />
                     <span>Admin Console (Overview, Verifications)</span>
@@ -555,13 +572,13 @@ export default function Navbar({
               )}
             </div>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-3">
               <div className="grid grid-cols-2 gap-2">
                 {navLinks.map((link) => (
                   <button
                     key={link.id}
                     onClick={() => handleNavClick(link.id)}
-                    className="text-left px-3 py-2.5 rounded-xl font-bold text-xs text-neutral-800 bg-neutral-50 hover:bg-neutral-100"
+                    className="text-left px-3.5 py-2.5 rounded-xl font-bold text-xs text-neutral-800 bg-neutral-50 hover:bg-neutral-100 transition-colors"
                   >
                     {link.label}
                   </button>
@@ -574,7 +591,7 @@ export default function Navbar({
                     setMobileMenuOpen(false);
                     onOpenAuth('partner');
                   }}
-                  className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl border border-orange-300 bg-orange-50 text-orange-900 font-bold text-xs shadow-2xs cursor-pointer"
+                  className="w-full flex items-center justify-center gap-1.5 py-3 rounded-2xl border border-orange-300 bg-orange-50 text-orange-950 font-bold text-xs shadow-2xs hover:bg-orange-100 transition-all cursor-pointer"
                 >
                   <Building2 className="w-4 h-4 text-orange-600" />
                   <span>NGO Portal</span>
@@ -585,7 +602,7 @@ export default function Navbar({
                     setMobileMenuOpen(false);
                     onOpenAuth('citizen');
                   }}
-                  className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-[#ea580c] text-white font-bold text-xs shadow-sm cursor-pointer"
+                  className="w-full flex items-center justify-center gap-1.5 py-3 rounded-2xl bg-[#ea580c] hover:bg-[#c2410c] text-white font-bold text-xs shadow-md shadow-orange-500/20 active:scale-95 transition-all cursor-pointer"
                 >
                   <User className="w-4 h-4" />
                   <span>Login / लॉगिन</span>
@@ -597,7 +614,7 @@ export default function Navbar({
                   setMobileMenuOpen(false);
                   onNavigateSection('admin');
                 }}
-                className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-900 font-bold text-xs shadow-2xs cursor-pointer mt-1"
+                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-2xl border border-emerald-300 bg-emerald-50 text-emerald-950 font-bold text-xs shadow-2xs hover:bg-emerald-100 transition-colors cursor-pointer"
               >
                 <Shield className="w-4 h-4 text-emerald-700" />
                 <span>Admin Console</span>

@@ -34,9 +34,9 @@ export default function CreateDispatchModal({
       type,
       deadline,
       publisher: {
-        name: 'State Livelihoods Mission Dispatch',
+        name: 'Central Livelihoods Guild Dispatch',
         verified: true,
-        gstin: 'Govt Administrative Order'
+        gstin: 'Central Administrative Order'
       },
       region,
       skill,
@@ -68,7 +68,7 @@ export default function CreateDispatchModal({
             </div>
             <div>
               <h3 className="text-sm font-bold text-neutral-900">Create Admin Dispatch</h3>
-              <p className="text-xs text-neutral-500">Publish government order or sponsored livelihood grant</p>
+              <p className="text-xs text-neutral-500">Publish administrative order or sponsored livelihood grant</p>
             </div>
           </div>
           <button 

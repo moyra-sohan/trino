@@ -225,7 +225,7 @@ export default function NgoProfile({
               onChange={(e) => handleInputChange('type', e.target.value)}
               className="w-full px-3.5 py-2.5 rounded-xl border border-neutral-300 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 text-xs font-medium text-neutral-900 outline-hidden transition-all bg-white"
             >
-              <option value="NGO (Non-Governmental Organization)">NGO (Non-Governmental Organization)</option>
+              <option value="NGO (Non-Profit Organization)">NGO (Non-Profit Organization)</option>
               <option value="Social Enterprise">Social Enterprise</option>
               <option value="Corporate CSR Foundation">Corporate CSR Foundation</option>
               <option value="Section 8 Not-For-Profit">Section 8 Not-For-Profit</option>

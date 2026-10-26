@@ -61,10 +61,12 @@ export default function AdminLayout({
               className="flex items-center gap-3 cursor-pointer group pb-5 border-b border-neutral-100"
               title="Return to NariSetu Home"
             >
-              {/* NariSetu Brand Icon */}
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#ea580c] to-[#f97316] flex items-center justify-center text-white shadow-md shadow-orange-500/20 group-hover:scale-105 transition-transform shrink-0">
-                <span className="font-bold text-lg leading-none font-serif">ন</span>
-              </div>
+              {/* NariSetu Brand Logo */}
+              <img 
+                src="/images/na_icon.png" 
+                alt="NariSetu Logo" 
+                className="w-10 h-10 rounded-2xl object-cover shadow-md shadow-orange-500/20 group-hover:scale-105 transition-transform shrink-0" 
+              />
               <div className="flex flex-col leading-tight">
                 <span className="text-base font-black tracking-tight text-neutral-900">
                   Nari<span className="text-[#ea580c]">Setu</span>
@@ -274,7 +276,7 @@ export default function AdminLayout({
                   <div className="absolute right-0 mt-2 w-60 bg-white rounded-2xl shadow-xl border border-neutral-200 p-2 z-50 animate-in fade-in slide-in-from-top-2 text-xs">
                     <div className="p-2.5 border-b border-neutral-100">
                       <div className="font-bold text-neutral-900">Platform Administrator</div>
-                      <div className="text-[11px] text-neutral-500">admin@narisetu.gov.in</div>
+                      <div className="text-[11px] text-neutral-500">admin@narisetu.org</div>
                       <div className="mt-1.5 inline-flex items-center gap-1 text-[10px] bg-emerald-50 text-emerald-800 font-bold px-2 py-0.5 rounded-full border border-emerald-200">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                         <span>Security Level: Superadmin</span>
@@ -347,9 +349,11 @@ export default function AdminLayout({
             <div>
               <div className="flex items-center justify-between pb-4 border-b border-neutral-100">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-xl bg-orange-600 flex items-center justify-center text-white font-bold">
-                    ন
-                  </div>
+                  <img 
+                    src="/images/na_icon.png" 
+                    alt="NariSetu Logo" 
+                    className="w-8 h-8 rounded-xl object-cover shadow-xs shrink-0" 
+                  />
                   <span className="font-black text-neutral-900 text-sm">NariSetu Admin</span>
                 </div>
                 <button 

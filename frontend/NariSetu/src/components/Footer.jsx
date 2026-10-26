@@ -33,9 +33,9 @@ export default function Footer({ onOpenAuth, onNavigateSection }) {
             </p>
 
             <div className="pt-2 flex flex-col gap-2 text-xs text-neutral-400">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-800/80 w-fit">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Ministry of Rural Development & Skill India Partner</span>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-950/80 text-orange-400 border border-orange-800/80 w-fit">
+                <span className="w-2 h-2 rounded-full bg-orange-400 animate-pulse" />
+                <span>Rural Women Empowerment & Skill Initiative</span>
               </div>
             </div>
           </div>
@@ -105,10 +105,10 @@ export default function Footer({ onOpenAuth, onNavigateSection }) {
               </li>
               <li>
                 <button 
-                  onClick={() => onOpenAuth('gov')} 
+                  onClick={() => onOpenAuth('admin')} 
                   className="hover:text-white transition-colors cursor-pointer"
                 >
-                  For Government Officials
+                  For Administrative Console
                 </button>
               </li>
             </ul>
@@ -133,7 +133,7 @@ export default function Footer({ onOpenAuth, onNavigateSection }) {
               </div>
               <div className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-neutral-400 shrink-0 mt-0.5" />
-                <span>Krishi Bhawan, New Delhi 110001</span>
+                <span>NariSetu Central Hub, Kolkata & New Delhi</span>
               </div>
             </div>
           </div>
@@ -143,7 +143,7 @@ export default function Footer({ onOpenAuth, onNavigateSection }) {
         {/* Bottom Bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral-500">
           <div>
-            © {new Date().getFullYear()} NariSetu. Ministry of Rural Development, Government of India. All Rights Reserved.
+            © {new Date().getFullYear()} NariSetu Platform. All Rights Reserved. Empowering Rural Women Artisans.
           </div>
 
           <div className="flex items-center gap-4">

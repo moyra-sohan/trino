@@ -80,10 +80,10 @@ export default function AuthModal({
         email: identifier || (activeRole === 'user' 
           ? 'aparna.ghosh@narisetu.org' 
           : activeRole === 'operator'
-          ? 'rekha.mondal@narisetu.wb.gov.in'
+          ? 'rekha.mondal@narisetu.org'
           : activeRole === 'partner' 
           ? 'partnerships@ruralsphere.org.in' 
-          : 'admin@narisetu.gov.in'),
+          : 'admin@narisetu.org'),
         role: activeRole,
         displayRole: activeRole === 'operator' ? 'Field Operator (Data Entry)' : activeRole,
         avatarInitials: activeRole === 'operator' ? 'RM' : null,
@@ -119,8 +119,8 @@ export default function AuthModal({
       setIdentifier('partnerships@ruralsphere.org.in');
       setPassword('rural@partner2026');
     } else {
-      setIdentifier('adm.director@narisetu.gov.in');
-      setPassword('gov@admin2026');
+      setIdentifier('admin@narisetu.org');
+      setPassword('admin@2026');
     }
     setIsVerified(true);
   };
@@ -515,7 +515,7 @@ export default function AuthModal({
 
                     <button 
                       type="button"
-                      onClick={() => onNotify('info', 'Helpline: 1800-200-NARI (support@narisetu.gov.in)')}
+                      onClick={() => onNotify('info', 'Helpline: 1800-200-NARI (support@narisetu.org)')}
                       className="text-amber-300 hover:underline"
                     >
                       Need Help?
@@ -556,7 +556,7 @@ export default function AuthModal({
                         required
                         value={identifier}
                         onChange={(e) => setIdentifier(e.target.value)}
-                        placeholder="nic.admin@gov.in or ID..."
+                        placeholder="admin@narisetu.org or ID..."
                         className="w-full pl-3.5 pr-28 py-3 rounded-xl bg-white/15 border border-teal-400/40 text-white placeholder-white/50 text-xs sm:text-sm outline-hidden focus:border-teal-300 focus:bg-white/20 transition-all"
                       />
                       <button

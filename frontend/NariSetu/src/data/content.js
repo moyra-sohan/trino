@@ -9,16 +9,16 @@ export const content = {
       login: "Login"
     },
     hero: {
-      govBadge: "Ministry of Rural Development & Skill India Initiative",
+      govBadge: "Rural Women Livelihoods & Skill Development Initiative",
       title: "NariSetu",
       subTitle: "Connecting Rural Women with Skills, Opportunities and a Stronger Tomorrow",
-      description: "A government-supported platform empowering rural women to master marketable skills, start self-reliant enterprises, and access financial schemes.",
+      description: "A dedicated empowerment platform supporting rural women to master marketable skills, start self-reliant enterprises, and access community financial schemes.",
       cards: [
         {
           id: "citizen",
           badge: "For Women / Citizens",
           title: "Women & Artisans",
-          desc: "Access vocational training, job linkages, community SHGs, and government financial support.",
+          desc: "Access vocational training, job linkages, community SHGs, and community financial support.",
           action: "Get Started",
           colorTheme: "pink"
         },
@@ -32,10 +32,10 @@ export const content = {
         },
         {
           id: "gov",
-          badge: "For Government",
-          title: "Officials & Gram Panchayats",
-          desc: "Survey households, onboard beneficiaries, monitor disbursements, and track progress.",
-          action: "Government Login",
+          badge: "For Administration",
+          title: "Administration & Field Console",
+          desc: "Survey households, onboard beneficiaries, coordinate support programs, and track progress.",
+          action: "Admin Login",
           colorTheme: "green"
         }
       ]
@@ -69,7 +69,7 @@ export const content = {
       {
         icon: "shield-check",
         title: "Safe & Trusted",
-        desc: "Bank-grade digital security backed by Government of India Aadhaar verification."
+        desc: "Bank-grade digital security with secure member identity verification."
       }
     ],
     stats: [
@@ -118,7 +118,7 @@ export const content = {
         {
           num: "05",
           title: "Hire & Sell",
-          desc: "Access guaranteed buyer networks, government exhibitions, and direct orders."
+          desc: "Access guaranteed buyer networks, artisan exhibitions, and direct orders."
         },
         {
           num: "06",
@@ -129,8 +129,8 @@ export const content = {
     },
     schemes: {
       badge: "03. SCHEMES & SUPPORT",
-      heading: "Find Government Schemes & Financial Support",
-      searchPlaceholder: "Search Government Schemes by name, skill, or keyword (e.g., Lakhpati, Loom, Loan)...",
+      heading: "Find Welfare Schemes & Financial Support",
+      searchPlaceholder: "Search Welfare Schemes by name, skill, or keyword (e.g., Lakhpati, Loom, Loan)...",
       categories: [
         "All Schemes",
         "Financial Support",
@@ -275,7 +275,7 @@ export const content = {
         schemes: "Popular Schemes",
         contact: "Contact & Support"
       },
-      copyright: "© 2026 NariSetu. All Rights Reserved. Supported by Digital India & Ministry of Rural Development.",
+      copyright: "© 2026 NariSetu. All Rights Reserved. Empowering Rural Women Artisans.",
       privacy: "Privacy Policy",
       terms: "Terms & Conditions",
       disclaimer: "Official Prototype Design Framework"
@@ -291,16 +291,16 @@ export const content = {
       login: "लॉगिन"
     },
     hero: {
-      govBadge: "ग्रामीण विकास मंत्रालय एवं स्किल इंडिया पहल",
+      govBadge: "ग्रामीण महिला आजीविका एवं कौशल विकास पहल",
       title: "नारीसेतु",
       subTitle: "ग्रामीण महिलाओं को कौशल, अवसर और एक सशक्त भविष्य से जोड़ना",
-      description: "ग्रामीण महिलाओं के कौशल विकास, स्वरोजगार की स्थापना और सरकारी वित्तीय योजनाओं का लाभ दिलाने के लिए एक समर्पित राष्ट्रीय मंच।",
+      description: "ग्रामीण महिलाओं के कौशल विकास, स्वरोजगार की स्थापना और सशक्त वित्तीय योजनाओं का लाभ दिलाने के लिए एक समर्पित मंच।",
       cards: [
         {
           id: "citizen",
           badge: "महिलाओं / नागरिकों के लिए",
           title: "महिलाएं और शिल्पकार",
-          desc: "कौशल प्रशिक्षण, रोजगार के अवसर, स्वयं सहायता समूह (SHG) और सरकारी सहायता प्राप्त करें।",
+          desc: "कौशल प्रशिक्षण, रोजगार के अवसर, स्वयं सहायता समूह (SHG) और सामुदायिक सहायता प्राप्त करें।",
           action: "शुरू करें",
           colorTheme: "pink"
         },
@@ -314,10 +314,10 @@ export const content = {
         },
         {
           id: "gov",
-          badge: "सरकारी अधिकारियों के लिए",
-          title: "अधिकारी और ग्राम पंचायत",
-          desc: "परिवारों का सर्वेक्षण करें, पंजीकरण करें, योजना लाभ वितरण और प्रगति की निगरानी करें।",
-          action: "सरकारी लॉगिन",
+          badge: "प्रशासनिक प्रबंधन के लिए",
+          title: "व्यवस्थापक और फील्ड कंसोल",
+          desc: "परिवारों का सर्वेक्षण करें, पंजीकरण करें, सहायता कार्यक्रमों और प्रगति की निगरानी करें।",
+          action: "एडमिन लॉगिन",
           colorTheme: "green"
         }
       ]
@@ -351,7 +351,7 @@ export const content = {
       {
         icon: "shield-check",
         title: "सुरक्षित और विश्वसनीय",
-        desc: "भारत सरकार के आधार और डिजिटल इंडिया सुरक्षा मानकों द्वारा प्रमाणित।"
+        desc: "उच्चतम सुरक्षा मानकों एवं सुरक्षित सदस्य प्रमाणीकरण द्वारा संचालित।"
       }
     ],
     stats: [
@@ -381,13 +381,13 @@ export const content = {
         { num: "02", title: "पंजीकरण", desc: "आधार और सहायिका की मदद से 2 मिनट में सरल डिजिटल पहचान।" },
         { num: "03", title: "जुड़ें", desc: "गाँव के स्वयं सहायता समूह (SHG) और प्रशिक्षण बैच से जुड़ें।" },
         { num: "04", title: "सूचनाएं", desc: "अपनी भाषा में योजनाओं, अनुदान और कार्यशालाओं की वॉइस सूचना।" },
-        { num: "05", title: "उत्पाद बिक्री", desc: "सीधे खरीदारों, सरकारी मेलों और ई-कॉमर्स बाजार से ऑर्डर।" },
+        { num: "05", title: "उत्पाद बिक्री", desc: "सीधे खरीदारों, शिल्प मेलों और ई-कॉमर्स बाजार से ऑर्डर।" },
         { num: "06", title: "प्रगति रिपोर्ट", desc: "मासिक आय, बैंक बचत और प्रमाणपत्रों की निरंतर ट्रैकिंग।" }
       ]
     },
     schemes: {
       badge: "03. योजनाएं और सहायता",
-      heading: "सरकारी योजनाएं और वित्तीय सहायता खोजें",
+      heading: "कल्याणकारी योजनाएं और वित्तीय सहायता खोजें",
       searchPlaceholder: "योजना का नाम या कौशल खोजें (जैसे: लखपति, सिलाई, ऋण, ड्रोन)...",
       categories: [
         "सभी योजनाएं",
@@ -533,7 +533,7 @@ export const content = {
         schemes: "प्रमुख योजनाएं",
         contact: "संपर्क व सहायता"
       },
-      copyright: "© 2026 नारीसेतु। सर्वाधिकार सुरक्षित। डिजिटल इंडिया एवं ग्रामीण विकास मंत्रालय द्वारा समर्थित।",
+      copyright: "© 2026 नारीसेतु। सर्वाधिकार सुरक्षित। ग्रामीण महिला सशक्तिकरण एवं कौशल विकास मंच।",
       privacy: "गोपनीयता नीति",
       terms: "नियम व शर्तें",
       disclaimer: "आधिकारिक प्रोटोटाइप फ्रेमवर्क"
@@ -543,22 +543,22 @@ export const content = {
     nav: {
       home: "হোম",
       about: "আমাদের কথা",
-      schemes: "সরকারি স্কিম ও সহায়তা",
+      schemes: "কল্যাণমুখী স্কিম ও সহায়তা",
       help: "সহায়তা কেন্দ্র",
       tagline: "দক্ষ নারী | শক্তিশালী সমাজ | উজ্জ্বল ভবিষ্যৎ",
       login: "লগইন"
     },
     hero: {
-      govBadge: "গ্রামোন্নয়ন মন্ত্রক ও স্কিল ইন্ডিয়া উদ্যোগ",
+      govBadge: "গ্রামীণ মহিলা জীবিকা ও দক্ষতা উন্নয়ন উদ্যোগ",
       title: "নারীসেতু",
       subTitle: "গ্রামীণ মহিলাদের দক্ষতা, সুযোগ এবং স্বনির্ভর আগামীর মেলবন্ধন",
-      description: "গ্রামীণ মহিলাদের কর্মদক্ষতা বৃদ্ধি, নিজস্ব ব্যবসা গড়ে তোলা এবং সরকারি অনুদান পাওয়ার এক বিশ্বস্ত জাতীয় ডিজিটাল প্ল্যাটফর্ম।",
+      description: "গ্রামীণ মহিলাদের কর্মদক্ষতা বৃদ্ধি, নিজস্ব ব্যবসা গড়ে তোলা এবং আর্থিক সহায়তা পাওয়ার এক বিশ্বস্ত ডিজিটাল প্ল্যাটফর্ম।",
       cards: [
         {
           id: "citizen",
           badge: "মহিলা ও কারিগরদের জন্য",
           title: "মহিলা ও নাগরিক",
-          desc: "দক্ষতা প্রশিক্ষণ, কর্মসংস্থান, স্বনির্ভর দল (SHG) এবং সরকারি আর্থিক সহায়তা পান।",
+          desc: "দক্ষতা প্রশিক্ষণ, কর্মসংস্থান, স্বনির্ভর দল (SHG) এবং সামাজিক আর্থিক সহায়তা পান।",
           action: "শুরু করুন",
           colorTheme: "pink"
         },
@@ -572,10 +572,10 @@ export const content = {
         },
         {
           id: "gov",
-          badge: "সরকারি আধিকারিকদের জন্য",
-          title: "আধিকারিক ও গ্রাম পঞ্চায়েত",
-          desc: "সার্ভে পরিচালনা, সুবিধাভোগী নিবন্ধন, অনুদান পর্যবেক্ষণ এবং অগ্রগতি ট্র্যাকিং।",
-          action: "সরকারি লগইন",
+          badge: "প্রশাসনিক ব্যবস্থাপনার জন্য",
+          title: "অ্যাডমিনিস্ট্রেশন ও ফিল্ড কনসোল",
+          desc: "সার্ভে পরিচালনা, সুবিধাভোগী নিবন্ধন, সহায়তা কার্যক্রম ও অগ্রগতি পর্যবেক্ষণ।",
+          action: "অ্যাডমিন লগইন",
           colorTheme: "green"
         }
       ]
@@ -608,8 +608,8 @@ export const content = {
       },
       {
         icon: "shield-check",
-        title: "নিরাপদ ও সরকারি স্বীকৃত",
-        desc: "ভারত সরকারের আধার ও ডিজিটাল ইন্ডিয়ার উচ্চ নিরাপত্তায় সুরক্ষিত।"
+        title: "নিরাপদ ও বিশ্বস্ত",
+        desc: "উচ্চমানের নিরাপত্তা মানদণ্ড ও সুরক্ষিত সদস্য প্রমাণীকরণে সুরক্ষিত।"
       }
     ],
     stats: [
@@ -638,14 +638,14 @@ export const content = {
         { num: "০১", title: "সার্ভে", desc: "দক্ষতা ও পরিবারের চাহিদার ডিজিটাল সমীক্ষা।" },
         { num: "০২", title: "নিবন্ধন", desc: "আধার কার্ড ও সহায়িকার সাহায্যে সহজ ডিজিটাল আইডি তৈরি।" },
         { num: "০৩", title: "যুক্ত হন", desc: "গ্রামের স্বনির্ভর গোষ্ঠী এবং প্রশিক্ষণ ব্যাচে যুক্ত হওয়া।" },
-        { num: "০৪", title: "তথ্য পান", desc: "স্থানীয় ভাষায় নতুন সরকারি স্কিম ও ভাতার ভয়েস মেসেজ।" },
+        { num: "০৪", title: "তথ্য পান", desc: "স্থানীয় ভাষায় নতুন কল্যাণমূলক স্কিম ও ভাতার ভয়েস মেসেজ।" },
         { num: "০৫", title: "উৎপাদন ও বিক্রি", desc: "সরাসরি পাইকারি ক্রেতা ও হস্তশিল্প মেলায় বিক্রি।" },
         { num: "০৬", title: "রিপোর্ট", desc: "নিয়মিত আয় বৃদ্ধি ও ব্যাংক রেকর্ডের স্বচ্ছ পর্যবেক্ষণ।" }
       ]
     },
     schemes: {
-      badge: "০৩. সরকারি স্কিম ও সহায়তা",
-      heading: "সরকারি স্কিম ও আর্থিক সহায়তা অনুসন্ধান করুন",
+      badge: "০৩. স্কিম ও সহায়তা",
+      heading: "জনকল্যাণমূলক স্কিম ও আর্থিক সহায়তা অনুসন্ধান করুন",
       searchPlaceholder: "স্কিমের নাম বা কাজের ধরন খুঁজুন (যেমন: লাখপতি, তাঁত, সেলাই, লোন)...",
       categories: [
         "সকল স্কিম",
@@ -690,7 +690,7 @@ export const content = {
           secondaryTag: "আর্থিক সহায়তা",
           amount: "বিনামূল্যে মোটর সেলাই মেশিন",
           highlights: [
-            "১০০% সরকারি ভরতুকিতে উন্নত মোটর চালিত সেলাই মেশিন",
+            "১০০% ভরতুকিতে উন্নত মোটর চালিত সেলাই মেশিন",
             "বুটিক ও পোশাক নকশার উন্নত প্রশিক্ষণ কর্মশালা",
             "গার্মেন্টস রপ্তানিকারকদের সাথে সরাসরি কাজের চুক্তি"
           ],
@@ -704,7 +704,7 @@ export const content = {
           secondaryTag: "আর্থিক সহায়তা",
           amount: "₹১০ লক্ষ থেকে ₹১ কোটি",
           highlights: [
-            "নতুন শিল্প বা সেবা প্রকল্প গড়ে তুলতে সরকারি ব্যাংক লোন",
+            "নতুন শিল্প বা সেবা প্রকল্প গড়ে তুলতে প্রাতিষ্ঠানিক ব্যাংক লোন",
             "৭ বছর পর্যন্ত সহজ কিস্তিতে পরিশোধের সুযোগ",
             "সিডবি ও ব্যাংকের পক্ষ থেকে বিশেষ পরামর্শ সহায়তা"
           ],
@@ -752,11 +752,11 @@ export const content = {
       faqs: [
         {
           q: "স্মার্টফোন বা ইন্টারনেট না থাকলে কীভাবে নাম নথিভুক্ত করবেন?",
-          a: "আপনি নিকটবর্তী গ্রাম পঞ্চায়েত অফিস বা সিএসসি (CSC) সেন্টারে যোগাযোগ করুন। সেখানে গ্রাম সহায়িকা আপনার আধার কার্ড দেখে বিনামূল্যে ফর্ম পূরণ করে দেবেন।"
+          a: "আপনি নিকটবর্তী কমিউনিটি সেন্টার বা অনুমোদিত সেবা কেন্দ্রে যোগাযোগ করুন। সেখানে গ্রাম সহায়িকা আপনার আধার কার্ড দেখে বিনামূল্যে ফর্ম পূরণ করে দেবেন।"
         },
         {
           q: "আমার কোন প্রকল্পে যোগ্যতা আছে তা কীভাবে জানব?",
-          a: "উপরে 'কথা বলে সাহায্য নিন' বোতামটি টিপে মুখে আপনার কাজের কথা বলুন, অথবা 'সরকারি স্কিম' ট্যাবে যে কোনো কার্ডে ক্লিক করে শর্তাবলি দেখে নিন।"
+          a: "উপরে 'কথা বলে সাহায্য নিন' বোতামটি টিপে মুখে আপনার কাজের কথা বলুন, অথবা 'কল্যাণমূলক স্কিম' ট্যাবে যে কোনো কার্ডে ক্লিক করে শর্তাবলি দেখে নিন।"
         },
         {
           q: "নিকটবর্তী ব্লক অপারেটর বা গ্রাম সহায়িকাকে কোথায় পাব?",
@@ -775,7 +775,7 @@ export const content = {
         title: "গ্রাম সহায়িকার সাথে কথা বলুন",
         name: "শ্রীমতী পূজা দেবী",
         role: "সিনিয়র গ্রাম মিত্র ও অনুমোদিত সিএসসি অপারেটর",
-        badge: "সরকারি স্বীকৃত গ্রাম সহায়িকা",
+        badge: "স্বীকৃত কমিউনিটি সহায়িকা",
         phoneLabel: "ফোন হেল্পলাইন",
         phoneNum: "1800-200-NARI (টোল-ফ্রি)",
         waLabel: "হোয়াটসঅ্যাপ সাপোর্ট",
@@ -791,7 +791,7 @@ export const content = {
         schemes: "জনপ্রিয় স্কিমসমূহ",
         contact: "যোগাযোগ ও তথ্য"
       },
-      copyright: "© ২০২৬ নারীসেতু। সর্বস্বত্ব সংরক্ষিত। ডিজিটাল ইন্ডিয়া ও ভারত সরকারের গ্রামোন্নয়ন মন্ত্রক কর্তৃক স্বীকৃত।",
+      copyright: "© ২০২৬ নারীসেতু। সর্বস্বত্ব সংরক্ষিত। গ্রামীণ মহিলা কারিগর ক্ষমতায়ন উদ্যোগ।",
       privacy: "গোপনীয়তা নীতি",
       terms: "নিয়ম ও শর্তাবলী",
       disclaimer: "অফিসিয়াল ফ্রেমওয়ার্ক ডিজাইন প্রোটোটাইপ"

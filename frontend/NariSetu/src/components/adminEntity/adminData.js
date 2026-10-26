@@ -641,7 +641,7 @@ export const initialOpportunities = [
       name: 'WB Artisan Dev Council',
       verified: false,
       infoNote: true,
-      gstin: 'Govt Liaison Node'
+      gstin: 'Regional Liaison Node'
     },
     region: 'Nadia, Hooghly',
     skill: 'Embroidery & Needlework',

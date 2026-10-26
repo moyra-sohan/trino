@@ -173,14 +173,14 @@ export default function WomanProfile({
                 <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:text-[#ea580c] transition-colors shrink-0" />
               </button>
 
-              {/* Verified by Government */}
+              {/* Verified Artisan Member */}
               <div className="w-full p-3.5 rounded-2xl bg-[#f0fdf4] border border-emerald-200/80 flex items-center gap-3.5 text-left">
                 <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
                   <ShieldCheck className="w-4 h-4" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-xs font-bold text-neutral-900">
-                    Verified by Government
+                    Verified Artisan Member
                   </div>
                   <div className="text-[11px] text-emerald-700 font-semibold truncate">
                     {profile.verifiedBy}

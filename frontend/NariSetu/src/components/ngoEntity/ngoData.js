@@ -3,7 +3,7 @@
 export const initialNgoProfile = {
   id: 'ngo-rural-sphere',
   name: 'Rural Sphere Foundation',
-  type: 'NGO (Non-Governmental Organization)',
+  type: 'NGO (Non-Profit Organization)',
   registrationNumber: 'WB/2018/0198421 - FCRA/80G Reg.',
   yearEstablished: '2018',
   status: 'Verified partner',

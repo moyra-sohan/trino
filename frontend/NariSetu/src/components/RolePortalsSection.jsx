@@ -8,7 +8,7 @@ export default function RolePortalsSection({ onOpenAuth }) {
       title: 'Woman Artisan / Citizen',
       badge: 'Artisans & Borrowers',
       badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-300',
-      description: 'Access government schemes, connect with self-help groups, and receive direct digital orders.',
+      description: 'Access welfare schemes, connect with self-help groups, and receive direct digital orders.',
       icon: User,
       iconBg: 'bg-emerald-50 text-emerald-600 border-emerald-200',
       buttonBg: 'bg-emerald-600 hover:bg-emerald-700 text-white',
