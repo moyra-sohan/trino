@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  X, Eye, EyeOff, Search, ChevronDown, Check, ShieldCheck, 
+  X, Eye, EyeOff, ChevronDown, Check, ShieldCheck, 
   Sparkles, CheckCircle2, Lock, ArrowRight, HelpCircle 
 } from 'lucide-react';
 import { api } from '../api';
@@ -136,13 +136,13 @@ export default function AuthModal({
         style={{ backgroundImage: `url('${roleBackgrounds[activeRole]}')` }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Soft Ambient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-black/40 pointer-events-none" />
+        {/* Soft Ambient Overlay - keeps artwork vivid and bright while ensuring contrast on the right */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/10 to-black/55 pointer-events-none" />
 
         {/* ========================================================= */}
-        {/* TOP BAR (MATCHING IMAGE 1 HEADER) */}
+        {/* TOP BAR */}
         {/* ========================================================= */}
-        <div className="relative z-20 px-6 py-4 flex items-center justify-between border-b border-white/15 bg-black/30 backdrop-blur-md">
+        <div className="relative z-20 px-6 py-4 flex items-center justify-between border-b border-white/15 bg-black/15 backdrop-blur-xs">
           {/* Brand Logo */}
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-xl overflow-hidden shadow-sm shrink-0">
@@ -153,37 +153,20 @@ export default function AuthModal({
             </span>
           </div>
 
-          {/* Search Box from Image */}
-          <div className="hidden sm:flex items-center bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-xs text-white/80 max-w-xs w-full mx-4">
-            <Search className="w-3.5 h-3.5 mr-2 text-white/60" />
-            <input 
-              type="text" 
-              placeholder="Search..." 
-              className="bg-transparent outline-hidden text-xs text-white placeholder-white/50 w-full" 
-            />
-          </div>
-
-          {/* Right Controls: Language & Close */}
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-semibold text-white">
-              <span>lang:</span>
-              <span className="font-bold text-amber-300">Hindi/English</span>
-            </div>
-
-            <button 
-              onClick={onClose}
-              className="p-1.5 rounded-full bg-white/10 hover:bg-white/25 text-white transition-colors cursor-pointer"
-              title="Close"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
+          {/* Close Button */}
+          <button 
+            onClick={onClose}
+            className="p-1.5 rounded-full bg-white/15 hover:bg-white/30 text-white transition-colors cursor-pointer"
+            title="Close"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
 
         {/* ========================================================= */}
         {/* 4 ROLES SELECTOR TABS (EASY ROLE SWITCHING) */}
         {/* ========================================================= */}
-        <div className="relative z-20 px-6 pt-3 pb-2 flex items-center justify-center sm:justify-start gap-2 overflow-x-auto bg-black/20">
+        <div className="relative z-20 px-6 pt-3 pb-2 flex items-center justify-center sm:justify-start gap-2 overflow-x-auto bg-black/10 backdrop-blur-xs">
           <button
             onClick={() => { setActiveRole('user'); setIsVerified(false); }}
             className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
