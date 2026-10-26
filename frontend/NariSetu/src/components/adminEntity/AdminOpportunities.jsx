@@ -18,14 +18,14 @@ export default function AdminOpportunities({
 
   const filteredOpps = opportunities.filter((opp) => {
     const matchesSearch = 
-      opp.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      opp.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      opp.publisher.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      opp.region.toLowerCase().includes(searchTerm.toLowerCase());
+      (opp?.title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (opp?.code || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (opp?.publisher?.name || opp?.issuer || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (opp?.region || '').toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesType = typeFilter === 'all' || opp.type.toLowerCase().includes(typeFilter.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || opp.statusType.toLowerCase().includes(statusFilter.toLowerCase());
-    const matchesDistrict = districtFilter === 'all' || opp.region.toLowerCase().includes(districtFilter.toLowerCase());
+    const matchesType = typeFilter === 'all' || (opp?.type || '').toLowerCase().includes(typeFilter.toLowerCase());
+    const matchesStatus = statusFilter === 'all' || (opp?.statusType || '').toLowerCase().includes(statusFilter.toLowerCase());
+    const matchesDistrict = districtFilter === 'all' || (opp?.region || '').toLowerCase().includes(districtFilter.toLowerCase());
 
     return matchesSearch && matchesType && matchesStatus && matchesDistrict;
   });
@@ -69,7 +69,7 @@ export default function AdminOpportunities({
   const handleExportCSV = () => {
     const csvContent = "data:text/csv;charset=utf-8," + 
       "Code,Title,Type,Publisher,Region,Skill,Budget,Status\n" +
-      opportunities.map(o => `"${o.code}","${o.title}","${o.type}","${o.publisher.name}","${o.region}","${o.skill}","${o.budget}","${o.status}"`).join("\n");
+      opportunities.map(o => `"${o?.code || ''}","${o?.title || ''}","${o?.type || ''}","${o?.publisher?.name || o?.issuer || ''}","${o?.region || ''}","${o?.skill || ''}","${o?.budget || ''}","${o?.status || ''}"`).join("\n");
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
@@ -88,7 +88,7 @@ export default function AdminOpportunities({
       {/* ========================================================= */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight font-serif">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight">
             Opportunities Moderation
           </h1>
           <p className="text-xs sm:text-sm text-neutral-500 mt-1 max-w-2xl">
@@ -283,7 +283,7 @@ export default function AdminOpportunities({
 
         {/* Table */}
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+          <table className="w-full text-left text-xs min-w-[950px]">
             <thead>
               <tr className="border-b border-neutral-100 text-[11px] font-bold text-neutral-400 uppercase tracking-wider bg-neutral-50/70">
                 <th className="py-3.5 px-5">Opportunity & ID</th>
@@ -310,21 +310,21 @@ export default function AdminOpportunities({
                         <div className={`p-1.5 rounded-xl border text-center shrink-0 ${
                           isPaused ? 'bg-rose-50 border-rose-200 text-rose-700' : 'bg-neutral-50 border-neutral-200 text-neutral-700'
                         }`}>
-                          <div className="text-[10px] font-mono font-bold">{opp.code}</div>
-                          <div className="text-[9px] text-neutral-400 whitespace-nowrap">{opp.type.split(' ')[0]}</div>
+                          <div className="text-[10px] font-mono font-bold">{opp?.code}</div>
+                          <div className="text-[9px] text-neutral-400 whitespace-nowrap">{(opp?.type || '').split(' ')[0]}</div>
                         </div>
 
                         <div>
                           <div className="font-bold text-neutral-900 leading-tight">
-                            {opp.title}
+                            {opp?.title}
                           </div>
-                          {opp.deadline && (
+                          {opp?.deadline && (
                             <div className="text-[11px] text-neutral-400 flex items-center gap-1 mt-0.5">
                               <Clock className="w-3 h-3 text-neutral-400" />
                               <span>Deadline: {opp.deadline}</span>
                             </div>
                           )}
-                          {opp.reason && (
+                          {opp?.reason && (
                             <div className="text-[10px] text-rose-600 font-medium mt-1">
                               Reason: {opp.reason}
                             </div>
@@ -337,14 +337,14 @@ export default function AdminOpportunities({
                     <td className="py-3.5 px-4 whitespace-nowrap">
                       <div className="flex items-center gap-1.5">
                         <span className="font-bold text-neutral-900 text-xs">
-                          {opp.publisher.name}
+                          {opp?.publisher?.name || opp?.issuer || 'Partner'}
                         </span>
-                        {opp.publisher.verified && (
+                        {opp?.publisher?.verified && (
                           <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                         )}
                       </div>
                       <div className="text-[10px] text-neutral-400 font-mono mt-0.5">
-                        {opp.publisher.gstin}
+                        {opp?.publisher?.gstin || ''}
                       </div>
                     </td>
 
@@ -361,30 +361,38 @@ export default function AdminOpportunities({
                     {/* Budget / Payout */}
                     <td className="py-3.5 px-4 whitespace-nowrap">
                       <div className="font-bold text-neutral-900">
-                        {opp.budget} {opp.unit ? <span className="text-neutral-500 font-normal">/ {opp.unit}</span> : ''}
+                        {opp?.budget || 'Competitive'} {opp?.unit ? <span className="text-neutral-500 font-normal">/ {opp.unit}</span> : ''}
                       </div>
-                      <div className={`text-[10px] font-bold mt-0.5 inline-block px-1.5 py-0.5 rounded ${opp.escrowBadgeColor}`}>
-                        {opp.escrowStatus}
+                      <div className={`text-[10px] font-bold mt-0.5 inline-block px-1.5 py-0.5 rounded ${opp?.escrowBadgeColor || 'bg-emerald-50 text-emerald-800 border border-emerald-200'}`}>
+                        {opp?.escrowStatus || 'Verified Funding'}
                       </div>
                     </td>
 
                     {/* Applicants */}
                     <td className="py-3.5 px-4 whitespace-nowrap">
-                      {opp.applicants.customText ? (
+                      {opp?.applicants?.customText ? (
                         <div className="text-neutral-700 text-xs font-semibold">
                           {opp.applicants.customText}
                         </div>
-                      ) : (
+                      ) : typeof opp?.applicants === 'number' ? (
+                        <div className="text-xs font-bold text-neutral-900">
+                          {opp.applicants} applicants
+                        </div>
+                      ) : opp?.applicants?.total ? (
                         <div className="space-y-1">
                           <div className="text-xs font-bold text-neutral-900">
-                            {opp.applicants.current} / {opp.applicants.total} slots
+                            {opp.applicants.current || 0} / {opp.applicants.total} slots
                           </div>
                           <div className="w-20 h-1.5 rounded-full bg-neutral-100 overflow-hidden">
                             <div 
                               className="h-full rounded-full bg-emerald-600"
-                              style={{ width: `${(opp.applicants.current / opp.applicants.total) * 100}%` }}
+                              style={{ width: `${Math.min(100, Math.max(5, ((opp.applicants.current || 0) / (opp.applicants.total || 1)) * 100))}%` }}
                             />
                           </div>
+                        </div>
+                      ) : (
+                        <div className="text-xs font-bold text-neutral-900">
+                          {opp?.applicants?.current || opp?.applicantsCount || 0} applicants
                         </div>
                       )}
                     </td>

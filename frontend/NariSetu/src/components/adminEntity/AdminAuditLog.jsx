@@ -13,11 +13,11 @@ export default function AdminAuditLog({
 
   const filteredLogs = auditLogs.filter((log) => {
     const matchesSearch = 
-      log.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (log.detail && log.detail.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (log.reviewer && log.reviewer.toLowerCase().includes(searchTerm.toLowerCase()));
+      (log?.action || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (log?.detail && log.detail.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (log?.reviewer && log.reviewer.toLowerCase().includes(searchTerm.toLowerCase()));
 
-    const matchesCategory = categoryFilter === 'all' || log.category === categoryFilter;
+    const matchesCategory = categoryFilter === 'all' || log?.category === categoryFilter;
 
     return matchesSearch && matchesCategory;
   });
@@ -25,7 +25,7 @@ export default function AdminAuditLog({
   const handleExportCSV = () => {
     const csvContent = "data:text/csv;charset=utf-8," + 
       "Action,Detail,Reviewer,Date,Category\n" +
-      auditLogs.map(l => `"${l.action}","${l.detail || ''}","${l.reviewer || ''}","${l.date}","${l.category}"`).join("\n");
+      auditLogs.map(l => `"${l?.action || ''}","${l?.detail || ''}","${l?.reviewer || ''}","${l?.date || ''}","${l?.category || ''}"`).join("\n");
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
@@ -42,7 +42,7 @@ export default function AdminAuditLog({
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight font-serif">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight">
             System Audit Log
           </h1>
           <p className="text-xs sm:text-sm text-neutral-500 mt-1 max-w-2xl">

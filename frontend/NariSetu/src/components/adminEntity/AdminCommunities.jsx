@@ -20,20 +20,20 @@ export default function AdminCommunities({
   // Filter logic
   const filteredCommunities = communities.filter((comm) => {
     const matchesSearch = 
-      comm.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      comm.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      comm.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      comm.leader.name.toLowerCase().includes(searchTerm.toLowerCase());
+      (comm?.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (comm?.code || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (comm?.location || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (comm?.leader?.name || comm?.leader || '').toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesDomain = domainFilter === 'all' || comm.domain.toLowerCase().includes(domainFilter.toLowerCase());
-    const matchesDistrict = districtFilter === 'all' || comm.district.toLowerCase().includes(districtFilter.toLowerCase());
+    const matchesDomain = domainFilter === 'all' || (comm?.domain || comm?.craft || '').toLowerCase().includes(domainFilter.toLowerCase());
+    const matchesDistrict = districtFilter === 'all' || (comm?.district || '').toLowerCase().includes(districtFilter.toLowerCase());
 
     const matchesStatus = 
       statusFilter === 'all' ||
-      (statusFilter === 'available' && comm.statusType === 'available') ||
-      (statusFilter === 'discussion' && comm.statusType === 'discussion') ||
-      (statusFilter === 'seeking' && comm.statusType === 'seeking') ||
-      (statusFilter === 'full' && comm.statusType === 'full');
+      (statusFilter === 'available' && comm?.statusType === 'available') ||
+      (statusFilter === 'discussion' && comm?.statusType === 'discussion') ||
+      (statusFilter === 'seeking' && comm?.statusType === 'seeking') ||
+      (statusFilter === 'full' && comm?.statusType === 'full');
 
     return matchesSearch && matchesDomain && matchesDistrict && matchesStatus;
   });
@@ -49,7 +49,7 @@ export default function AdminCommunities({
   const handleExportCSV = () => {
     const csvContent = "data:text/csv;charset=utf-8," + 
       "Code,Name,Domain,Purpose,Location,District,Leader,Status\n" +
-      communities.map(c => `"${c.code}","${c.name}","${c.domain}","${c.purpose}","${c.location}","${c.district}","${c.leader.name}","${c.status}"`).join("\n");
+      communities.map(c => `"${c?.code || ''}","${c?.name || ''}","${c?.domain || ''}","${c?.purpose || ''}","${c?.location || ''}","${c?.district || ''}","${c?.leader?.name || c?.leader || ''}","${c?.status || ''}"`).join("\n");
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
@@ -68,7 +68,7 @@ export default function AdminCommunities({
       {/* ========================================================= */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight font-serif">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight">
             Communities & SHGs
           </h1>
           <p className="text-xs sm:text-sm text-neutral-500 mt-1 max-w-2xl">
@@ -300,7 +300,7 @@ export default function AdminCommunities({
       {/* ========================================================= */}
       <div className="bg-white rounded-2xl border border-neutral-200/80 shadow-2xs overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+          <table className="w-full text-left text-xs min-w-[950px]">
             <thead>
               <tr className="border-b border-neutral-100 text-[11px] font-bold text-neutral-400 uppercase tracking-wider bg-neutral-50/70">
                 <th className="py-3.5 px-5">Community & Identifier</th>
@@ -356,13 +356,13 @@ export default function AdminCommunities({
                     {/* Leadership */}
                     <td className="py-3.5 px-4 whitespace-nowrap">
                       <div className="flex items-center gap-2">
-                        <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${comm.leader.avatarBg}`}>
-                          {comm.leader.initials}
+                        <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold ${comm?.leader?.avatarBg || 'bg-amber-100 text-amber-900'}`}>
+                          {comm?.leader?.initials || comm?.leader?.name?.slice(0, 2).toUpperCase() || 'LD'}
                         </div>
                         <span className="font-bold text-neutral-800 text-xs">
-                          {comm.leader.name}
+                          {comm?.leader?.name || comm?.leader || 'Coordinator'}
                         </span>
-                        {comm.leader.verified && (
+                        {comm?.leader?.verified && (
                           <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                         )}
                       </div>
@@ -465,7 +465,7 @@ export default function AdminCommunities({
               </div>
               <div className="flex justify-between">
                 <span className="text-neutral-500 font-semibold">Coordinator:</span>
-                <span className="font-bold text-neutral-800">{selectedCommunityForModal.leader.name}</span>
+                <span className="font-bold text-neutral-800">{selectedCommunityForModal?.leader?.name || selectedCommunityForModal?.leader || 'Coordinator'}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-neutral-500 font-semibold">Equipment:</span>

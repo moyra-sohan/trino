@@ -1,8 +1,8 @@
 import React from 'react';
-import { 
-  Building2, ClipboardCheck, Users, AlertTriangle, 
-  ArrowUpRight, ChevronRight, CheckCircle2, Clock, 
-  ExternalLink, Eye, ArrowRight 
+import {
+  Building2, ClipboardCheck, Users, AlertTriangle,
+  ArrowUpRight, ChevronRight, CheckCircle2, Clock,
+  ExternalLink, Eye, ArrowRight
 } from 'lucide-react';
 
 export default function AdminOverview({
@@ -33,7 +33,7 @@ export default function AdminOverview({
       {/* 1. PAGE HEADER */}
       {/* ========================================================= */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight font-serif">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight">
           Admin Console
         </h1>
         <p className="text-xs sm:text-sm text-neutral-500 mt-1">
@@ -135,7 +135,7 @@ export default function AdminOverview({
 
             {/* Table */}
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
+              <table className="w-full text-left text-xs min-w-[550px]">
                 <thead>
                   <tr className="border-b border-neutral-100 text-[11px] font-bold text-neutral-400 uppercase tracking-wider bg-neutral-50/50">
                     <th className="py-3 px-5">Organization</th>
@@ -268,20 +268,47 @@ export default function AdminOverview({
 
             {/* Flagged Alert Cards matching Screenshot 1 */}
             <div className="space-y-3">
-              {flaggedContent.map((flag) => (
-                <div
-                  key={flag.id}
-                  onClick={() => onNavigateTab('flagged')}
-                  className={`p-3.5 rounded-xl border text-left cursor-pointer transition-transform hover:-translate-y-0.5 ${flag.bgColor}`}
-                >
-                  <div className="text-xs font-bold leading-tight">
-                    {flag.title}
-                  </div>
-                  <div className="text-[11px] opacity-80 mt-1 leading-relaxed">
-                    {flag.description}
-                  </div>
+              {(!flaggedContent || flaggedContent.length === 0) ? (
+                <div className="p-4 rounded-xl bg-neutral-50 text-neutral-500 text-xs text-center border border-dashed border-neutral-200">
+                  No open flags or reports at this time.
                 </div>
-              ))}
+              ) : (
+                flaggedContent.map((flag) => {
+                  const title = flag.title || flag.target || 'Flagged Listing';
+                  const description = flag.description || flag.reason || 'Reported for administrative review.';
+                  const priority = (flag.priority || 'medium').toLowerCase();
+                  const bgColor = flag.bgColor || (
+                    priority === 'high'
+                      ? 'bg-rose-50 border-rose-200 text-rose-900'
+                      : priority === 'medium'
+                      ? 'bg-amber-50 border-amber-200 text-amber-900'
+                      : 'bg-sky-50 border-sky-200 text-sky-900'
+                  );
+
+                  return (
+                    <div
+                      key={flag.id}
+                      onClick={() => onNavigateTab('flagged')}
+                      className={`p-3.5 rounded-xl border text-left cursor-pointer transition-transform hover:-translate-y-0.5 ${bgColor}`}
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-white/80 border border-neutral-200/50">
+                          {flag.category || 'Platform Report'}
+                        </span>
+                        <span className="text-[10px] font-semibold opacity-70">
+                          {flag.timestamp || flag.date || 'Recent'}
+                        </span>
+                      </div>
+                      <div className="text-xs font-bold leading-tight">
+                        {title}
+                      </div>
+                      <div className="text-[11px] opacity-85 mt-1 leading-relaxed">
+                        {description}
+                      </div>
+                    </div>
+                  );
+                })
+              )}
             </div>
           </div>
 

@@ -136,7 +136,7 @@ export default function AdminUsersAndRoles({
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight font-serif">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight">
             Users & Roles Management
           </h1>
           <p className="text-xs sm:text-sm text-neutral-500 mt-1 max-w-2xl">
@@ -212,7 +212,7 @@ export default function AdminUsersAndRoles({
       {/* Users Table */}
       <div className="bg-white rounded-2xl border border-neutral-200/80 shadow-2xs overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+          <table className="w-full text-left text-xs min-w-[650px]">
             <thead>
               <tr className="border-b border-neutral-100 text-[11px] font-bold text-neutral-400 uppercase tracking-wider bg-neutral-50/70">
                 <th className="py-3.5 px-5">User</th>

@@ -21,7 +21,7 @@ export default function AdminSettings({ onNotify }) {
       
       {/* Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight font-serif">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight">
           Platform Settings & Security
         </h1>
         <p className="text-xs sm:text-sm text-neutral-500 mt-1">

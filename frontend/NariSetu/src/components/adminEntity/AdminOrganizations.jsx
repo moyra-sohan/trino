@@ -19,14 +19,14 @@ export default function AdminOrganizations({
   // Filter organizations
   const filteredOrgs = organizations.filter((org) => {
     const matchesSearch = 
-      org.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      org.regId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      org.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      org.sector.toLowerCase().includes(searchTerm.toLowerCase());
+      (org?.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (org?.regId || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (org?.location || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (org?.sector || '').toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesEntity = entityFilter === 'all' || org.category.toLowerCase().includes(entityFilter.toLowerCase());
-    const matchesDistrict = districtFilter === 'all' || org.district.toLowerCase().includes(districtFilter.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || org.statusType.toLowerCase().includes(statusFilter.toLowerCase());
+    const matchesEntity = entityFilter === 'all' || (org?.category || '').toLowerCase().includes(entityFilter.toLowerCase());
+    const matchesDistrict = districtFilter === 'all' || (org?.district || '').toLowerCase().includes(districtFilter.toLowerCase());
+    const matchesStatus = statusFilter === 'all' || (org?.statusType || '').toLowerCase().includes(statusFilter.toLowerCase());
 
     return matchesSearch && matchesEntity && matchesDistrict && matchesStatus;
   });
@@ -60,7 +60,7 @@ export default function AdminOrganizations({
         <div>
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-600" />
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight font-serif">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight">
               Registered Organizations
             </h1>
           </div>
@@ -222,7 +222,7 @@ export default function AdminOrganizations({
       {/* ========================================================= */}
       <div className="bg-white rounded-2xl border border-neutral-200/80 shadow-2xs overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+          <table className="w-full text-left text-xs min-w-[950px]">
             <thead>
               <tr className="border-b border-neutral-100 text-[11px] font-bold text-neutral-400 uppercase tracking-wider bg-neutral-50/70">
                 <th className="py-3.5 px-5">Organization & District</th>
@@ -247,17 +247,17 @@ export default function AdminOrganizations({
                     {/* Organization & District */}
                     <td className="py-3.5 px-5">
                       <div className="flex items-center gap-3">
-                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black shrink-0 ${org.avatarBg}`}>
-                          {org.initials}
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black shrink-0 ${org?.avatarBg || 'bg-emerald-700 text-white'}`}>
+                          {org?.initials || org?.name?.slice(0, 2).toUpperCase() || 'OR'}
                         </div>
                         <div>
                           <div className="font-bold text-neutral-900 leading-tight">
-                            {org.name}
+                            {org?.name}
                           </div>
                           <div className="text-[11px] text-neutral-400 flex items-center gap-1.5 mt-0.5">
-                            <span>{org.location}</span>
+                            <span>{org?.location}</span>
                             <span>•</span>
-                            <span className="font-medium text-neutral-600">{org.categoryBadge}</span>
+                            <span className="font-medium text-neutral-600">{org?.categoryBadge || org?.category || 'Entity'}</span>
                           </div>
                         </div>
                       </div>
@@ -265,21 +265,21 @@ export default function AdminOrganizations({
 
                     {/* Registration ID */}
                     <td className="py-3.5 px-4 font-mono text-[11px] text-neutral-600 whitespace-nowrap">
-                      {org.regId}
+                      {org?.regId}
                     </td>
 
                     {/* Sector / Category */}
                     <td className="py-3.5 px-4 text-neutral-700 font-medium whitespace-nowrap">
-                      {org.sector}
+                      {org?.sector}
                     </td>
 
                     {/* Connected Communities */}
                     <td className="py-3.5 px-4 whitespace-nowrap">
                       <span className="font-bold text-neutral-900">
-                        {org.connectedCommunities.split(' ')[0]}
+                        {org?.connectedCommunities ? org.connectedCommunities.split(' ')[0] : (org?.communitiesCount || '12')}
                       </span>{' '}
                       <span className="text-neutral-500 text-[11px]">
-                        {org.connectedCommunities.split(' ').slice(1).join(' ')}
+                        {org?.connectedCommunities && org.connectedCommunities.includes(' ') ? org.connectedCommunities.split(' ').slice(1).join(' ') : 'Communities'}
                       </span>
                     </td>
 
